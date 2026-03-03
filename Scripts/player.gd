@@ -29,6 +29,7 @@ var _body_col_offset_x: float  # original x offset of body CollisionShape2D
 @onready var hurtbox_col: CollisionShape2D = $Hurtbox/CollisionShape2D
 @onready var body_col: CollisionShape2D = $CollisionShape2D
 
+var hit_flash_material: ShaderMaterial
 
 func _ready() -> void:
 	health = max_health
@@ -36,6 +37,17 @@ func _ready() -> void:
 	anim_player.animation_finished.connect(_on_animation_finished)
 	sm.transition_to(State.IDLE)
 	anim_player.play("idle")
+	
+	if sprite.material is ShaderMaterial:
+		hit_flash_material = sprite.material
+		print("Shader material found!")  # Helpful for debugging
+	else:
+		print("No shader material assigned to sprite!")
+		# If no material, create one (optional)
+		var new_material = ShaderMaterial.new()
+		new_material.shader = preload("res://Shaders/Player.gdshader")
+		sprite.material = new_material
+		hit_flash_material = new_material
 
 
 func _physics_process(delta: float) -> void:
@@ -232,4 +244,25 @@ func take_damage(amount: int) -> void:
 	attack_buffered = false
 	if health == 0:
 		pending_death = true
+		
+	#Your damage logic here
+	print("Player took damage!")
+	
+	# Trigger the flash effect
+	trigger_hit_flash()
 	_transition_play(State.HURT, "hurt")
+	
+	
+
+func trigger_hit_flash():
+	# Check your SettingsManager toggle
+	
+	if SettingsManager.hit_flash_enabled:
+		# Turn flash ON
+		hit_flash_material.set_shader_parameter("hit_effect", 1.0)
+		
+		# Turn flash OFF after 0.1 seconds
+		await get_tree().create_timer(0.1).timeout
+		hit_flash_material.set_shader_parameter("hit_effect", 0.0)
+	else:
+		print("Hit flash disabled")  # Optional debug
