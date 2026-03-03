@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://cpem1vsdwuh53" path="res://Assets/Warrior-V1.3/Warrior/Individual Sprite/Attack/Warrior_Attack_1.png" id="1_0objx"]
 [ext_resource type="Script" uid="uid://dr62vfko0c4x" path="res://Scenes/Player/player.gd" id="1_1e6p3"]
-[ext_resource type="Shader" uid="uid://bqvon5q0id1hl" path="res://Scenes/Player/Player.gdshader" id="1_w71ue"]
+[ext_resource type="Shader" uid="uid://bqvon5q0id1hl" path="res://Shaders/Player.gdshader" id="1_w71ue"]
 [ext_resource type="Texture2D" uid="uid://tnhhxd1l0ava" path="res://Assets/Warrior-V1.3/Warrior/Individual Sprite/Attack/Warrior_Attack_2.png" id="2_w71ue"]
 [ext_resource type="Texture2D" uid="uid://cciydbs33uksu" path="res://Assets/Warrior-V1.3/Warrior/Individual Sprite/Attack/Warrior_Attack_3.png" id="3_1e6p3"]
 [ext_resource type="Texture2D" uid="uid://bo0f4p687gjlc" path="res://Assets/Warrior-V1.3/Warrior/Individual Sprite/Attack/Warrior_Attack_4.png" id="4_yb677"]

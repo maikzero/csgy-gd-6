@@ -12,7 +12,7 @@ func _ready():
 		print("No shader material assigned to sprite!")
 		# If no material, create one (optional)
 		var new_material = ShaderMaterial.new()
-		new_material.shader = preload("res://Scenes/Player/Player.gdshader")
+		new_material.shader = preload("res://Shaders/Player.gdshader")
 		sprite.material = new_material
 		hit_flash_material = new_material
 
