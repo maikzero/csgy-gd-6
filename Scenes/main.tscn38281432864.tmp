@@ -7,11 +7,6 @@
 [node name="Main" type="Node2D" unique_id=1015059756]
 
 [node name="Player" parent="." unique_id=975744696 instance=ExtResource("1_jjgbg")]
-speed = null
-jump_velocity = null
-dash_speed = null
-dash_duration = null
-max_health = null
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1155116055]
 zoom = Vector2(4, 4)
