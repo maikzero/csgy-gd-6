@@ -28,6 +28,7 @@ var _body_col_offset_x: float  # original x offset of body CollisionShape2D
 @onready var hurtbox: Area2D = $Hurtbox
 @onready var hurtbox_col: CollisionShape2D = $Hurtbox/CollisionShape2D
 @onready var body_col: CollisionShape2D = $CollisionShape2D
+@onready var camera: Camera2D = $Camera2D
 
 var hit_flash_material: ShaderMaterial
 
@@ -244,6 +245,13 @@ func take_damage(amount: int) -> void:
 	attack_buffered = false
 	if health == 0:
 		pending_death = true
+	
+	# Trigger screen shake
+	if SettingsManager.screen_shake_enabled:
+		if camera and camera.has_method("start_shake"):  
+			camera.start_shake(0.2, 3.0)
+		else:
+			print("Camera doesn't have start_shake method!")
 		
 	#Your damage logic here
 	print("Player took damage!")
@@ -252,7 +260,7 @@ func take_damage(amount: int) -> void:
 	trigger_hit_flash()
 	_transition_play(State.HURT, "hurt")
 	
-	
+
 
 func trigger_hit_flash():
 	# Check your SettingsManager toggle
