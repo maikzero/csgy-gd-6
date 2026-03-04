@@ -29,6 +29,16 @@ func _connect_to_player() -> void:
 
 	player.health_changed.connect(_on_health_changed)
 
+	var sm = get_tree().current_scene.get_node_or_null("UI_Layer/SettingsManager")
+	if sm:
+		sm.delay_bar_toggled.connect(_on_delay_bar_toggled)
+
+
+func _on_delay_bar_toggled(enabled: bool) -> void:
+	delay_bar.visible = enabled
+	if not enabled and _tween:
+		_tween.kill()
+
 
 func _on_health_changed(new_health: int, max_health: int) -> void:
 	print("HealthBar: health changed to ", new_health)

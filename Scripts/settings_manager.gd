@@ -5,6 +5,9 @@ var hit_flash_enabled: bool = true
 var blood_enabled: bool = true
 var screen_shake_enabled: bool = true
 var parallax_enabled: bool = true
+var delay_bar_enabled: bool = true
+
+signal delay_bar_toggled(enabled: bool)
 
 @onready var panel: PanelContainer = $Panel
 @onready var settings_button: Button = $SettingsButton
@@ -14,6 +17,7 @@ var parallax_enabled: bool = true
 @onready var blood_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/BloodRow/BloodToggle
 @onready var screen_shake_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/ScreenShakeRow/ScreenShakeToggle
 @onready var parallax_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/ParallaxRow/ParallaxToggle
+@onready var delay_bar_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/DelayBarRow/DelayBarToggle
 @onready var parallax_bg: ParallaxBackground = get_tree().current_scene.get_node("ParallaxBackground")
 
 var _parallax_layer_scales: Array[Vector2] = []
@@ -34,17 +38,23 @@ func _ready() -> void:
 	blood_toggle.toggled.connect(func(on): blood_enabled = on)
 	screen_shake_toggle.toggled.connect(func(on): screen_shake_enabled = on)
 	parallax_toggle.toggled.connect(_on_parallax_toggled)
+	delay_bar_toggle.toggled.connect(func(on):
+		delay_bar_enabled = on
+		delay_bar_toggled.emit(on)
+	)
 	_apply_sound()
 
 
 func _on_settings_button_pressed() -> void:
 	panel.visible = not panel.visible
 	settings_button.visible = not settings_button.visible
+	get_tree().paused = panel.visible
 
 
 func _on_close_button_pressed() -> void:
 	panel.visible = false
 	settings_button.visible = true
+	get_tree().paused = false
 
 
 # Programmatic toggles (for other scripts to call)
