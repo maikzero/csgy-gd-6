@@ -440,6 +440,11 @@ sources/0 = SubResource("TileSetAtlasSource_6bp64")
 
 [node name="Player" parent="." unique_id=975744696 instance=ExtResource("1_jjgbg")]
 position = Vector2(4, 96)
+speed = null
+jump_velocity = null
+dash_speed = null
+dash_duration = null
+max_health = null
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1155116055]
 offset = Vector2(0, -30)

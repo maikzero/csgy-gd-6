@@ -10,8 +10,11 @@ extends Node2D
 @export var wave_increase_rate: float = 0.5  # How much harder each wave gets
 
 # Spawn area
-@export var spawn_area: Rect2 = Rect2(100, 100, 600, 400)
+@export var spawn_area: Rect2 = Rect2(100, 86, 600, 20)  # Spawn HIGHER (Y=300)
 @export var min_distance_from_player: float = 100.0  # Don't spawn too close
+var time: float = 0
+
+@export var ground_y: float = 450
 
 # Current wave state
 var current_wave: int = 0
@@ -40,6 +43,16 @@ func _ready():
 	
 	# Start first wave
 	start_wave(1)
+
+func _process(delta):
+	time += delta
+	
+	# Make spawn area pulse slightly
+	spawn_area.size.x = 600 + sin(time * 2) * 50
+	
+	# Or make it follow the player
+	if player:
+		spawn_area.position.x = player.global_position.x - 300
 
 func start_wave(wave_number: int):
 	current_wave = wave_number
