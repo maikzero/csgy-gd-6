@@ -1,25 +1,64 @@
 [gd_scene format=3 uid="uid://cqfwsy1y0ml3x"]
 
 [ext_resource type="PackedScene" uid="uid://cpyir86t1g7t1" path="res://Scenes/player.tscn" id="1_jjgbg"]
+[ext_resource type="PackedScene" uid="uid://cmsd3jl1u58h4" path="res://Scenes/settings_manager.tscn" id="2_smgr"]
+[ext_resource type="Texture2D" uid="uid://b8lbe7ir60osp" path="res://Assets/oak_woods_v1.0/background/background_layer_1.png" id="3_kry3j"]
+[ext_resource type="Texture2D" uid="uid://dnx6bvstt3tfo" path="res://Assets/oak_woods_v1.0/background/background_layer_2.png" id="4_21xkr"]
+[ext_resource type="Texture2D" uid="uid://ctdry6ak13lvp" path="res://Assets/oak_woods_v1.0/background/background_layer_3.png" id="5_6bp64"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_jjgbg"]
 
 [node name="Main" type="Node2D" unique_id=1015059756]
 
 [node name="Player" parent="." unique_id=975744696 instance=ExtResource("1_jjgbg")]
+position = Vector2(4, 96)
 speed = null
 jump_velocity = null
 dash_speed = null
 dash_duration = null
 max_health = null
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1155116055]
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=1155116055]
+offset = Vector2(0, -30)
 zoom = Vector2(4, 4)
+limit_left = -400
+limit_top = 30
+limit_right = 400
+limit_bottom = 350
+position_smoothing_enabled = true
 
 [node name="GameWorld" type="StaticBody2D" parent="." unique_id=1240363773]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GameWorld" unique_id=516074956]
-position = Vector2(0, 38)
+position = Vector2(0, 150)
 shape = SubResource("WorldBoundaryShape2D_jjgbg")
 
 [node name="UI_Layer" type="CanvasLayer" parent="." unique_id=131806300]
+
+[node name="SettingsManager" parent="UI_Layer" unique_id=1670002564 instance=ExtResource("2_smgr")]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="." unique_id=1088123897]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground" unique_id=1320699115]
+motion_scale = Vector2(0, 0)
+motion_mirroring = Vector2(320, 180)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer" unique_id=1178150076]
+texture = ExtResource("3_kry3j")
+centered = false
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground" unique_id=1827534201]
+motion_scale = Vector2(0.5, 0.5)
+motion_mirroring = Vector2(320, 180)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer2" unique_id=1151594761]
+texture = ExtResource("4_21xkr")
+centered = false
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground" unique_id=1071376467]
+motion_scale = Vector2(0.9, 0.9)
+motion_mirroring = Vector2(320, 180)
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer3" unique_id=1649330209]
+texture = ExtResource("5_6bp64")
+centered = false

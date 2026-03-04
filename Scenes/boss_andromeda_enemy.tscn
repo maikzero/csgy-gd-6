@@ -1,19 +1,22 @@
 [gd_scene format=3 uid="uid://b2ubcgh7glj18"]
 
-[ext_resource type="Script" uid="uid://cl8f1vwqa5g7e" path="res://scripts/enemy.gd" id="1_4bdhp"]
+[ext_resource type="Script" uid="uid://cl8f1vwqa5g7e" path="res://Scripts/enemy.gd" id="1_4bdhp"]
 [ext_resource type="SpriteFrames" uid="uid://cngcd26xleb0d" path="res://addons/duelyst_animated_sprites/assets/spriteframes/units/boss_andromeda.tres" id="2_xruc2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rje5s"]
-size = Vector2(65, 63)
+size = Vector2(18, 37.5)
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1531192772]
 script = ExtResource("1_4bdhp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=692104439]
 sprite_frames = ExtResource("2_xruc2")
-animation = &"attack"
+animation = &"run"
+frame = 7
+frame_progress = 0.9769529
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1904896265]
+position = Vector2(5, 13)
 shape = SubResource("RectangleShape2D_rje5s")
 
 [node name="BloodParticles" type="GPUParticles2D" parent="." unique_id=1105118623]

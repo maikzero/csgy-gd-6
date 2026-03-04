@@ -1,0 +1,121 @@
+[gd_scene format=3 uid="uid://cmsd3jl1u58h4"]
+
+[ext_resource type="Script" uid="uid://cuvbr7cawutu5" path="res://Scripts/settings_manager.gd" id="1_b7ibd"]
+
+[node name="SettingsManager" type="Control" unique_id=1670002564]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_b7ibd")
+
+[node name="SettingsButton" type="Button" parent="." unique_id=479662669]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -44.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 44.0
+grow_horizontal = 0
+tooltip_text = "Settings"
+text = "⚙"
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=218190545]
+visible = false
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -220.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=615983652]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=2054926790]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=1225974674]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/MarginContainer/VBoxContainer/TitleRow" unique_id=1695564900]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Settings"
+
+[node name="CloseButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/TitleRow" unique_id=1637665330]
+layout_mode = 2
+text = "✕"
+
+[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer" unique_id=1168589988]
+layout_mode = 2
+
+[node name="SoundRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=157736974]
+layout_mode = 2
+
+[node name="SoundLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/SoundRow" unique_id=697531160]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Sound"
+
+[node name="SoundToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/SoundRow" unique_id=147851671]
+layout_mode = 2
+button_pressed = true
+
+[node name="HitFlashRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=764147625]
+layout_mode = 2
+
+[node name="HitFlashLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/HitFlashRow" unique_id=1144380785]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Hit Flash"
+
+[node name="HitFlashToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/HitFlashRow" unique_id=1144956917]
+layout_mode = 2
+button_pressed = true
+
+[node name="BloodRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=476805547]
+layout_mode = 2
+
+[node name="BloodLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/BloodRow" unique_id=1248129015]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Blood Effects"
+
+[node name="BloodToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/BloodRow" unique_id=538702503]
+layout_mode = 2
+button_pressed = true
+
+[node name="ScreenShakeRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=1650840148]
+layout_mode = 2
+
+[node name="ScreenShakeLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/ScreenShakeRow" unique_id=2060047017]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Screen Shake"
+
+[node name="ScreenShakeToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/ScreenShakeRow" unique_id=347680437]
+layout_mode = 2
+button_pressed = true
+
+[node name="ParallaxRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ParallaxLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/ParallaxRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Parallax Background"
+
+[node name="ParallaxToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/ParallaxRow"]
+layout_mode = 2
+button_pressed = true
