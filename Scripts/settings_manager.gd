@@ -3,7 +3,7 @@ extends Control
 var sound_enabled: bool = true
 var hit_flash_enabled: bool = true
 var blood_enabled: bool = true
-var screen_shake_enabled: bool = true
+static var screen_shake_enabled: bool = true
 var parallax_enabled: bool = true
 var delay_bar_enabled: bool = true
 
@@ -36,8 +36,8 @@ func _ready() -> void:
 	)
 	hit_flash_toggle.toggled.connect(func(on): hit_flash_enabled = on)
 	blood_toggle.toggled.connect(func(on): blood_enabled = on)
-	screen_shake_enabled = screen_shake_toggle.button_pressed
-	screen_shake_toggle.toggled.connect(func(on): screen_shake_enabled = on)
+	SettingsManager.screen_shake_enabled = screen_shake_toggle.button_pressed
+	screen_shake_toggle.toggled.connect(func(on): SettingsManager.screen_shake_enabled = on)
 	parallax_toggle.toggled.connect(_on_parallax_toggled)
 	delay_bar_toggle.toggled.connect(func(on):
 		delay_bar_enabled = on
@@ -75,8 +75,8 @@ func toggle_blood() -> void:
 	blood_toggle.button_pressed = blood_enabled
 
 func toggle_screen_shake() -> void:
-	screen_shake_enabled = not screen_shake_enabled
-	screen_shake_toggle.button_pressed = screen_shake_enabled
+	SettingsManager.screen_shake_enabled = not SettingsManager.screen_shake_enabled
+	screen_shake_toggle.button_pressed = SettingsManager.screen_shake_enabled
 
 func _on_parallax_toggled(on: bool) -> void:
 	parallax_enabled = on
