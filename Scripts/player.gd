@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+signal health_changed(new_health: int, max_health: int)
+
 enum State {
 	IDLE, RUN, JUMP, UP_TO_FALL, FALL,
 	ATTACK, ATTACK2, DASH, DASH_ATTACK,
@@ -244,11 +246,7 @@ func take_damage(amount: int) -> void:
 	attack_buffered = false
 	if health == 0:
 		pending_death = true
-		
-	#Your damage logic here
-	print("Player took damage!")
-	
-	# Trigger the flash eddddd dffect
+	health_changed.emit(health, max_health)
 	trigger_hit_flash()
 	_transition_play(State.HURT, "hurt")
 	

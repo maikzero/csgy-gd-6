@@ -2,7 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://cpyir86t1g7t1" path="res://Scenes/player.tscn" id="1_jjgbg"]
 [ext_resource type="Texture2D" uid="uid://gy8om04c3wac" path="res://Assets/oak_woods_v1.0/oak_woods_tileset.png" id="2_21xkr"]
-[ext_resource type="Script" uid="uid://cw4rpmraq02dx" path="res://scripts/enemy_manager.gd" id="2_bo1nx"]
+[ext_resource type="Script" uid="uid://cw4rpmraq02dx" path="res://Scripts/enemy_manager.gd" id="2_bo1nx"]
+[ext_resource type="Script" uid="uid://b3kp4032wf2pd" path="res://Scripts/health_bar.gd" id="2_hlthbr"]
 [ext_resource type="PackedScene" uid="uid://cmsd3jl1u58h4" path="res://Scenes/settings_manager.tscn" id="2_smgr"]
 [ext_resource type="PackedScene" uid="uid://b2ubcgh7glj18" path="res://Scenes/boss_andromeda_enemy.tscn" id="3_8gbba"]
 [ext_resource type="Texture2D" uid="uid://b8lbe7ir60osp" path="res://Assets/oak_woods_v1.0/background/background_layer_1.png" id="3_kry3j"]
@@ -436,6 +437,31 @@ texture = ExtResource("2_21xkr")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_6bp64")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ynf5e"]
+bg_color = Color(0.23921569, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hptm8"]
+bg_color = Color(0.40390328, 8.4228816e-07, 9.62615e-08, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d1ilt"]
+bg_color = Color(0.29803923, 0.12941177, 0.07450981, 0)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.67475605, 0.64915186, 0.63204366, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6iyac"]
+bg_color = Color(0.81060827, 0.03607294, 1.92523e-07, 1)
+
 [node name="Main" type="Node2D" unique_id=1015059756]
 
 [node name="Player" parent="." unique_id=975744696 instance=ExtResource("1_jjgbg")]
@@ -459,6 +485,29 @@ tile_set = SubResource("TileSet_344ge")
 [node name="UI_Layer" type="CanvasLayer" parent="." unique_id=131806300]
 
 [node name="SettingsManager" parent="UI_Layer" unique_id=1670002564 instance=ExtResource("2_smgr")]
+
+[node name="MarginContainer" type="MarginContainer" parent="UI_Layer" unique_id=667491648]
+offset_right = 300.0
+offset_bottom = 30.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+script = ExtResource("2_hlthbr")
+
+[node name="DelayBar" type="ProgressBar" parent="UI_Layer/MarginContainer" unique_id=2140758811]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_ynf5e")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hptm8")
+step = 1.0
+show_percentage = false
+
+[node name="HealthBar" type="ProgressBar" parent="UI_Layer/MarginContainer" unique_id=1845230343]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_d1ilt")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6iyac")
+step = 1.0
+show_percentage = false
 
 [node name="EnemyManager" type="Node2D" parent="." unique_id=192281223]
 script = ExtResource("2_bo1nx")
