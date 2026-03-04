@@ -46,21 +46,41 @@ func _ready():
 	
 	# Try to play something
 	change_state(State.IDLE)
+	if attack_timer:
+		# Disconnect any existing connections to avoid duplicates
+		if attack_timer.timeout.is_connected(_on_attack_timer_timeout):
+			attack_timer.timeout.disconnect(_on_attack_timer_timeout)
+		
+		# Connect it fresh
+		attack_timer.timeout.connect(_on_attack_timer_timeout)
+		print("Attack timer signal connected: ", attack_timer.timeout.is_connected(_on_attack_timer_timeout))
+	
+	if hurt_timer:
+		if hurt_timer.timeout.is_connected(_on_hurt_timer_timeout):
+			hurt_timer.timeout.disconnect(_on_hurt_timer_timeout)
+		hurt_timer.timeout.connect(_on_hurt_timer_timeout)
+		print("Hurt timer signal connected: ", hurt_timer.timeout.is_connected(_on_hurt_timer_timeout))
 	
 	# Setup timers if they don't exist
-	if not attack_timer:
-		attack_timer = Timer.new()
-		attack_timer.wait_time = attack_cooldown
-		attack_timer.one_shot = true
-		attack_timer.timeout.connect(_on_attack_timer_timeout)
-		add_child(attack_timer)
+	#if not attack_timer:
+		#attack_timer = Timer.new()
+		#attack_timer.wait_time = attack_cooldown
+		#attack_timer.one_shot = true
+		#attack_timer.timeout.connect(_on_attack_timer_timeout)
+		#add_child(attack_timer)
+	#
+	#if not hurt_timer:
+		#hurt_timer = Timer.new()
+		#hurt_timer.wait_time = 0.3  # How long hurt animation plays
+		#hurt_timer.one_shot = true
+		#hurt_timer.timeout.connect(_on_hurt_timer_timeout)
+		#add_child(hurt_timer)
+	print("Attack timer exists: ", attack_timer != null)
+	print("Hurt timer exists: ", hurt_timer != null)
 	
-	if not hurt_timer:
-		hurt_timer = Timer.new()
-		hurt_timer.wait_time = 0.3  # How long hurt animation plays
-		hurt_timer.one_shot = true
-		hurt_timer.timeout.connect(_on_hurt_timer_timeout)
-		add_child(hurt_timer)
+	if attack_timer:
+		print("Attack timer wait time: ", attack_timer.wait_time)
+		print("Attack timer one shot: ", attack_timer.one_shot)
 	
 	# Setup hit flash material
 	if animated_sprite.material is ShaderMaterial:
@@ -284,6 +304,7 @@ func die():
 # Timer callbacks
 func _on_attack_timer_timeout():
 	can_attack = true
+	#print("Enemy can attack again!")
 
 func _on_hurt_timer_timeout():
 	is_hurt = false
