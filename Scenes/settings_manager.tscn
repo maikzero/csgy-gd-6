@@ -11,6 +11,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+process_mode = 3
 script = ExtResource("1_b7ibd")
 
 [node name="SettingsButton" type="Button" parent="." unique_id=479662669]
@@ -23,6 +24,7 @@ offset_top = 8.0
 offset_right = -8.0
 offset_bottom = 44.0
 grow_horizontal = 0
+process_mode = 3
 tooltip_text = "Settings"
 text = "⚙"
 
@@ -36,6 +38,7 @@ anchor_bottom = 1.0
 offset_left = -220.0
 grow_horizontal = 0
 grow_vertical = 2
+process_mode = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=615983652]
 layout_mode = 2
@@ -120,6 +123,18 @@ size_flags_horizontal = 3
 text = "Parallax Background"
 
 [node name="ParallaxToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/ParallaxRow" unique_id=388625554]
+layout_mode = 2
+button_pressed = true
+
+[node name="DelayBarRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=229184501]
+layout_mode = 2
+
+[node name="DelayBarLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/DelayBarRow" unique_id=312847206]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Delay Health Bar"
+
+[node name="DelayBarToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/DelayBarRow" unique_id=408193762]
 layout_mode = 2
 button_pressed = true
 
