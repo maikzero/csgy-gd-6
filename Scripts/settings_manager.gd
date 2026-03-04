@@ -26,11 +26,15 @@ func _ready() -> void:
 			_parallax_layer_scales.append(layer.motion_scale)
 	settings_button.pressed.connect(_on_settings_button_pressed)
 	close_button.pressed.connect(_on_close_button_pressed)
-	sound_toggle.toggled.connect(func(on): sound_enabled = on)
+	sound_toggle.toggled.connect(func(on): 
+		sound_enabled = on
+		_apply_sound()
+	)
 	hit_flash_toggle.toggled.connect(func(on): hit_flash_enabled = on)
 	blood_toggle.toggled.connect(func(on): blood_enabled = on)
 	screen_shake_toggle.toggled.connect(func(on): screen_shake_enabled = on)
 	parallax_toggle.toggled.connect(_on_parallax_toggled)
+	_apply_sound()
 
 
 func _on_settings_button_pressed() -> void:
@@ -47,6 +51,7 @@ func _on_close_button_pressed() -> void:
 func toggle_sound() -> void:
 	sound_enabled = not sound_enabled
 	sound_toggle.button_pressed = sound_enabled
+	_apply_sound()
 
 
 func toggle_hit_flash() -> void:
@@ -81,3 +86,7 @@ func _apply_parallax(on: bool) -> void:
 		if layer is ParallaxLayer:
 			layer.motion_scale = _parallax_layer_scales[i] if on else Vector2.ZERO
 			i += 1
+			
+func _apply_sound() -> void:
+	var master_bus := AudioServer.get_bus_index("Master")
+	AudioServer.set_bus_mute(master_bus, !sound_enabled)

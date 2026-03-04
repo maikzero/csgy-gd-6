@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cmsd3jl1u58h4"]
 
-[ext_resource type="Script" uid="uid://cuvbr7cawutu5" path="res://scripts/settings_manager.gd" id="1_b7ibd"]
+[ext_resource type="Script" uid="uid://cuvbr7cawutu5" path="res://Scripts/settings_manager.gd" id="1_b7ibd"]
+[ext_resource type="AudioStream" uid="uid://btqmb8p8hiy2x" path="res://Audio/BGM/the_midnight_wood.ogg" id="2_eeab1"]
 
 [node name="SettingsManager" type="Control" unique_id=1670002564]
 layout_mode = 3
@@ -121,3 +122,9 @@ text = "Parallax Background"
 [node name="ParallaxToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/ParallaxRow" unique_id=388625554]
 layout_mode = 2
 button_pressed = true
+
+[node name="BGM" type="AudioStreamPlayer" parent="." unique_id=1602624471]
+stream = ExtResource("2_eeab1")
+volume_db = -12.0
+autoplay = true
+parameters/looping = true
