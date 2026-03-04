@@ -4,6 +4,7 @@
 [ext_resource type="AudioStream" uid="uid://btqmb8p8hiy2x" path="res://Audio/BGM/the_midnight_wood.ogg" id="2_eeab1"]
 
 [node name="SettingsManager" type="Control" unique_id=1670002564]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,10 +12,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-process_mode = 3
 script = ExtResource("1_b7ibd")
 
 [node name="SettingsButton" type="Button" parent="." unique_id=479662669]
+process_mode = 3
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -24,11 +25,11 @@ offset_top = 8.0
 offset_right = -8.0
 offset_bottom = 44.0
 grow_horizontal = 0
-process_mode = 3
 tooltip_text = "Settings"
 text = "⚙"
 
 [node name="Panel" type="PanelContainer" parent="." unique_id=218190545]
+process_mode = 3
 visible = false
 layout_mode = 1
 anchors_preset = 11
@@ -38,7 +39,6 @@ anchor_bottom = 1.0
 offset_left = -220.0
 grow_horizontal = 0
 grow_vertical = 2
-process_mode = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=615983652]
 layout_mode = 2

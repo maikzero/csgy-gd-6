@@ -352,19 +352,14 @@ func take_damage(amount: int) -> void:
 	if health == 0:
 		pending_death = true
 	health_changed.emit(health, max_health)
-	
-	# Trigger screen shake
-	if SettingsManager.screen_shake_enabled:
-		if camera and camera.has_method("start_shake"):  
-			camera.start_shake(0.2, 3.0)
-		else:
-			print("Camera doesn't have start_shake method!")
 		
 	#Your damage logic here
 	print("Player took damage!")
 	
-	# Trigger the flash eddddd dffect
+	# Trigger the flash effect
 	trigger_hit_flash()
+	if SettingsManager.screen_shake_enabled:
+		camera.shake(0.2, 3.0)
 	_transition_play(State.HURT, "hurt")
 	
 
