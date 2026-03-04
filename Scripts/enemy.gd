@@ -25,7 +25,7 @@ var current_state: State = State.IDLE
 @onready var blood_particles: GPUParticles2D = $BloodParticles
 @onready var audio_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
 @onready var attack_timer: Timer = $AttackTimer
-@onready var hurt_timer: Timer = $HurtTimer  # Add this as a child node
+@onready var hurt_timer: Timer = $HurtTimer
 
 # Shader material for hit flash
 var hit_flash_material: ShaderMaterial
@@ -46,12 +46,6 @@ func _ready():
 	
 		# Log enemy position on spawn
 	print("🏃 Enemy spawned at: ", global_position)
-	print("   Hitbox position: ", $HitboxArea.global_position)
-	
-	if has_node("HitboxArea/CollisionShape2D"):
-		var shape_node = $HitboxArea/CollisionShape2D
-		if shape_node.shape is RectangleShape2D:
-			print("📏 CURRENT HITBOX SIZE: ", shape_node.shape.size)
 	
 	# Try to play something
 	change_state(State.IDLE)
@@ -87,21 +81,6 @@ func _ready():
 	print("Attack timer exists: ", attack_timer != null)
 	print("Hurt timer exists: ", hurt_timer != null)
 	
-	if has_node("HitboxArea"):
-		var hitbox = $HitboxArea
-		print("=== ENEMY HITBOX SETUP ===")
-		print("Hitbox exists: ", hitbox)
-		print("Hitbox collision layer: ", hitbox.collision_layer)
-		print("Hitbox collision mask: ", hitbox.collision_mask)
-		print("Hitbox has shape: ", hitbox.get_child(0) is CollisionShape2D)
-		
-		# Check which layers are enabled
-		for i in range(1, 20):
-			if hitbox.get_collision_layer_value(i):
-				print("  Layer ", i, " enabled")
-	else:
-		print("❌ No HitboxArea node found!")
-	
 	if attack_timer:
 		print("Attack timer wait time: ", attack_timer.wait_time)
 		print("Attack timer one shot: ", attack_timer.one_shot)
@@ -131,10 +110,8 @@ func change_state(new_state: State):
 func exit_state(state: State):
 	match state:
 		State.ATTACK:
-			# Any cleanup when leaving attack state
 			pass
 		State.HURT:
-			# Any cleanup when leaving hurt state
 			pass
 
 func enter_state(state: State):
@@ -147,10 +124,6 @@ func enter_state(state: State):
 		
 		State.ATTACK:
 			animated_sprite.play("attack")
-			# Deal damage when attack starts
-			if player and global_position.distance_to(player.global_position) <= attack_range:
-				if player.has_method("take_damage"):
-					player.take_damage(attack_damage)
 		
 		State.HURT:
 			animated_sprite.play("hurt")
@@ -259,18 +232,8 @@ func play_animation(anim_name: String):
 func attack_player():
 	can_attack = false
 	attack_timer.start()
-	
-	# Play attack animation
 	play_animation("attack")
-	
-	# Deal damage to player (if in range)
-	if player and global_position.distance_to(player.global_position) <= attack_range:
-		if player.has_method("take_damage"):
-			player.take_damage(attack_damage)
-	
-	# Optional: Attack sound
 	if SettingsManager.sound_enabled:
-		# Play attack sound if you have one
 		pass
 
 func take_damage(damage: int):

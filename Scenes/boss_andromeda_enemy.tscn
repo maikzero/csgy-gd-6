@@ -1,24 +1,22 @@
 [gd_scene format=3 uid="uid://b2ubcgh7glj18"]
 
-[ext_resource type="Script" uid="uid://cl8f1vwqa5g7e" path="res://scripts/enemy.gd" id="1_4bdhp"]
+[ext_resource type="Script" uid="uid://cl8f1vwqa5g7e" path="res://Scripts/enemy.gd" id="1_4bdhp"]
 [ext_resource type="SpriteFrames" uid="uid://cngcd26xleb0d" path="res://addons/duelyst_animated_sprites/assets/spriteframes/units/boss_andromeda.tres" id="2_xruc2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4bdhp"]
-size = Vector2(120, 300)
+size = Vector2(20, 37)
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1531192772 groups=["enemy"]]
+collision_layer = 4
+collision_mask = 5
 script = ExtResource("1_4bdhp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=692104439 groups=["enemy"]]
 sprite_frames = ExtResource("2_xruc2")
 animation = &"idle"
 
-[node name="HitboxArea" type="Area2D" parent="." unique_id=1998738351]
-collision_layer = 8
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxArea" unique_id=197480148]
-position = Vector2(2, 1)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=197480148]
+position = Vector2(-1, 10.5)
 shape = SubResource("RectangleShape2D_4bdhp")
 
 [node name="BloodParticles" type="GPUParticles2D" parent="." unique_id=1105118623]

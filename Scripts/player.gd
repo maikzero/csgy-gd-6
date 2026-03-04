@@ -60,56 +60,30 @@ func _ready() -> void:
 		sprite.material = new_material
 		hit_flash_material = new_material
 	
-	attack_area.area_entered.connect(_on_attack_area_entered)
-	attack_area.monitoring = false
+	attack_area.body_entered.connect(_on_hitbox_body_entered)
+	attack_area.monitoring = true
+	
+	hurtbox.body_entered.connect(_on_hurtbox_body_entered)
 	
 	print("=== PLAYER ATTACK SETUP ===")
 	print("Attack area: ", attack_area)
 	print("Attack area monitoring: ", attack_area.monitoring)
 	print("Attack area collision layer: ", attack_area.collision_layer)
 	print("Attack area collision mask: ", attack_area.collision_mask)
-	print("Attack area connected signals: ", attack_area.area_entered.get_connections())
 
-func _on_attack_area_entered(area: Area2D):
-	print("\n=== ATTACK DETECTION DEBUG ===")
-	print("1. Area entered: ", area.name)
-	print("2. Area class: ", area.get_class())
-	
-	var enemy = area.get_parent()
-	print("3. Parent node: ", enemy.name)
-	print("4. Parent class: ", enemy.get_class())
-	print("5. Parent groups: ", enemy.get_groups())
-	print("6. Parent has 'take_damage'? ", enemy.has_method("take_damage"))
-	#print("7. Current attacking state: ", attacking)
-	print("8. Can deal damage: ", can_deal_damage)
-	
-	# Check if already in attacked_enemies
-	print("9. Already attacked? ", enemy in attacked_enemies)
-	
-	#if not attacking:
-		#print("❌ Not attacking, ignoring")
-		#return
-	
+func _on_hitbox_body_entered(body: Node2D) -> void:
 	if not can_deal_damage:
-		print("❌ Cannot deal damage now")
 		return
-	
-	if enemy in attacked_enemies:
-		print("❌ Already hit this enemy")
+	if body in attacked_enemies:
 		return
-	
-	if enemy.has_method("take_damage"):
-		print("✅ take_damage found, calling it...")
-		attacked_enemies.append(enemy)
-		enemy.take_damage(attack_damage)
-		print("💥 Damage dealt!")
-	else:
-		print("❌ Enemy missing take_damage method!")
-		print("   Enemy methods: ", enemy.get_method_list().map(func(m): return m["name"]))
-	
-	# Screen shake
-	#if SettingsManager.screen_shake_enabled:
-		#$Camera2D.shake(0.1, 5.0)
+	if body.is_in_group("enemy") and body.has_method("take_damage"):
+		attacked_enemies.append(body)
+		body.take_damage(attack_damage)
+
+
+func _on_hurtbox_body_entered(body: Node2D) -> void:
+	if body.is_in_group("enemy") and "attack_damage" in body:
+		take_damage(body.attack_damage)
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -231,56 +205,9 @@ func _enter_attack() -> void:
 	if SettingsManager.sound_enabled:
 		sword_sfx.play()
 	attack_buffered = false
-	_transition_play(State.ATTACK, "attack")
-	
-	attack_area.monitoring = true
 	can_deal_damage = true
-	attacked_enemies.clear()  # Reset for this attack
-	
-	if sprite.flip_h:  # Facing left
-		$WeaponPivot.position = Vector2(-40, 96 - global_position.y)  # Adjust Y to ground level
-	else:  # Facing right
-		$WeaponPivot.position = Vector2(40, 96 - global_position.y)   # Adjust Y to ground leve
-	
-	# For CollisionPolygon2D - use .polygon, not .shape
-	var polygon_node = $WeaponPivot/Hitbox/CollisionPolygon2D
-	var points = polygon_node.polygon
-	
-	if points and points.size() > 0:
-		# Calculate bounds from polygon points
-		var min_x = 0
-		var max_x = 0
-		var min_y = 0
-		var max_y = 0
-		
-		for point in points:
-			min_x = min(min_x, point.x)
-			max_x = max(max_x, point.x)
-			min_y = min(min_y, point.y)
-			max_y = max(max_y, point.y)
-		
-		var width = max_x - min_x
-		var height = max_y - min_y
-		var center = Vector2((min_x + max_x) / 2, (min_y + max_y) / 2)
-		
-		print("Attack area polygon points: ", points.size())
-		print("Attack area bounds: width=", width, " height=", height)
-		print("Attack area local center: ", center)
-		print("Attack area global position: ", polygon_node.global_position)
-	
-	print("Attack area eneabled")
-	print("Attack area monitoring: ", attack_area.monitoring)
-	print("Attack area position: ", attack_area.global_position)
-	print("Attack area scale: ", attack_area.scale)
-	var overlapping = attack_area.get_overlapping_areas()
-	print("Overlapping areas immediately: ", overlapping.size())
-	for area in overlapping:
-		print("  → Overlapping: ", area.name, " (parent: ", area.get_parent().name, ")")
-		print("    Area layer: ", area.collision_layer)
-	# Disable after attack duration
-	await get_tree().create_timer(0.3).timeout  # Match attack animation
-	attack_area.monitoring = false
-	can_deal_damage = false
+	attacked_enemies.clear()
+	_transition_play(State.ATTACK, "attack")
 
 
 # Only transitions if we're not already in new_state (prevents animation restart).
@@ -312,12 +239,16 @@ func _update_facing_visuals() -> void:
 func _on_animation_finished(anim_name: StringName) -> void:
 	match anim_name:
 		"attack":
+			can_deal_damage = false
 			if attack_buffered:
 				attack_buffered = false
+				attacked_enemies.clear()
+				can_deal_damage = true
 				_transition_play(State.ATTACK2, "attack2")
 			else:
 				_return_to_ground_state()
 		"attack2":
+			can_deal_damage = false
 			_return_to_ground_state()
 		"dash":
 			is_invincible = false

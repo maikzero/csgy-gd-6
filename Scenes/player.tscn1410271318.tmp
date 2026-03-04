@@ -1045,6 +1045,12 @@ _data = {
 [node name="Player" type="CharacterBody2D" unique_id=975744696 groups=["player"]]
 collision_layer = 2
 script = ExtResource("1_f5f5t")
+speed = null
+jump_velocity = null
+dash_speed = null
+dash_duration = null
+max_health = null
+attack_damage = null
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=660705950]
 material = SubResource("ShaderMaterial_by7i4")
@@ -1064,7 +1070,7 @@ script = ExtResource("sm_script")
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=337271183]
 collision_layer = 8
-collision_mask = 4
+collision_mask = 32
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1692016243]
 position = Vector2(-5, 4)
