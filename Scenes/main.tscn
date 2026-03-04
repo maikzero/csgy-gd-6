@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://cqfwsy1y0ml3x"]
 
 [ext_resource type="PackedScene" uid="uid://cpyir86t1g7t1" path="res://Scenes/player.tscn" id="1_jjgbg"]
+[ext_resource type="Script" uid="uid://cw4rpmraq02dx" path="res://scripts/enemy_manager.gd" id="2_bo1nx"]
+[ext_resource type="PackedScene" uid="uid://b2ubcgh7glj18" path="res://Scenes/boss_andromeda_enemy.tscn" id="3_8gbba"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_jjgbg"]
 
@@ -23,3 +25,8 @@ position = Vector2(0, 38)
 shape = SubResource("WorldBoundaryShape2D_jjgbg")
 
 [node name="UI_Layer" type="CanvasLayer" parent="." unique_id=131806300]
+
+[node name="EnemyManager" type="Node2D" parent="." unique_id=1356470278]
+script = ExtResource("2_bo1nx")
+enemy_types = Array[PackedScene]([ExtResource("3_8gbba")])
+elite_enemy_types = Array[PackedScene]([ExtResource("3_8gbba")])

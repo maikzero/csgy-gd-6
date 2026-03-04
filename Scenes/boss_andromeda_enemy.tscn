@@ -4,18 +4,23 @@
 [ext_resource type="SpriteFrames" uid="uid://cngcd26xleb0d" path="res://addons/duelyst_animated_sprites/assets/spriteframes/units/boss_andromeda.tres" id="2_xruc2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rje5s"]
-size = Vector2(65, 63)
+size = Vector2(35.75, 29.75)
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1531192772]
 script = ExtResource("1_4bdhp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=692104439]
 sprite_frames = ExtResource("2_xruc2")
-animation = &"attack"
+animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1904896265]
+position = Vector2(0, 6)
 shape = SubResource("RectangleShape2D_rje5s")
 
 [node name="BloodParticles" type="GPUParticles2D" parent="." unique_id=1105118623]
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=773228366]
+
+[node name="AttackTimer" type="Timer" parent="." unique_id=1841809149]
+
+[node name="HurtTimer" type="Timer" parent="." unique_id=940031649]

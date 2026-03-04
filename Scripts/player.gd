@@ -248,7 +248,7 @@ func take_damage(amount: int) -> void:
 	#Your damage logic here
 	print("Player took damage!")
 	
-	# Trigger the flash effect
+	# Trigger the flash eddddd dffect
 	trigger_hit_flash()
 	_transition_play(State.HURT, "hurt")
 	
