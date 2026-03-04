@@ -68,6 +68,9 @@
 [ext_resource type="Texture2D" uid="uid://dg3yatbrlsblv" path="res://Assets/Warrior-V1.3/Warrior/Individual Sprite/Run/Warrior_Run_8.png" id="64_x8yfv"]
 [ext_resource type="Texture2D" uid="uid://yvo3upurevms" path="res://Assets/Warrior-V1.3/Warrior/Individual Sprite/UptoFall/Warrior_UptoFall_1.png" id="65_sg72k"]
 [ext_resource type="Texture2D" uid="uid://3mdv5dorvncu" path="res://Assets/Warrior-V1.3/Warrior/Individual Sprite/UptoFall/Warrior_UptoFall_2.png" id="66_fjjiw"]
+[ext_resource type="AudioStream" uid="uid://cu1u25063uce6" path="res://Audio/SFX/dash.ogg" id="70_3uvy8"]
+[ext_resource type="AudioStream" uid="uid://dds00dy5qoieu" path="res://Audio/SFX/sword.ogg" id="71_ss172"]
+[ext_resource type="AudioStream" uid="uid://c0dpbnqpqdb7e" path="res://Audio/SFX/jump.ogg" id="72_ss172"]
 [ext_resource type="Script" uid="uid://cj7hvt5y3xnk7" path="res://Scripts/state_machine.gd" id="sm_script"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_by7i4"]
@@ -1075,3 +1078,12 @@ position = Vector2(-5.8770833, 5.15625)
 scale = Vector2(2.8958333, 1.6875)
 polygon = PackedVector2Array(6.061, 5.123, 12.26, -0.415, 8.856, -14.741, 0.945, -13.285, -4.74, -8.885, 7.055, -10.42)
 disabled = true
+
+[node name="DashSFX" type="AudioStreamPlayer" parent="." unique_id=1843995624]
+stream = ExtResource("70_3uvy8")
+
+[node name="SwordSFX" type="AudioStreamPlayer" parent="." unique_id=264313041]
+stream = ExtResource("71_ss172")
+
+[node name="JumpSFX" type="AudioStreamPlayer" parent="." unique_id=1559161288]
+stream = ExtResource("72_ss172")
