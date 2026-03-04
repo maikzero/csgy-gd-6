@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b2ubcgh7glj18"]
 
-[ext_resource type="Script" uid="uid://cl8f1vwqa5g7e" path="res://scripts/enemy.gd" id="1_4bdhp"]
+[ext_resource type="Script" uid="uid://cl8f1vwqa5g7e" path="res://Scripts/enemy.gd" id="1_4bdhp"]
 [ext_resource type="SpriteFrames" uid="uid://cngcd26xleb0d" path="res://addons/duelyst_animated_sprites/assets/spriteframes/units/boss_andromeda.tres" id="2_xruc2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rje5s"]

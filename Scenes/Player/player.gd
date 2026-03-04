@@ -15,6 +15,13 @@ func _ready():
 		new_material.shader = preload("res://Shaders/Player.gdshader")
 		sprite.material = new_material
 		hit_flash_material = new_material
+	await get_tree().process_frame
+	
+	if SettingsManager:
+		print("✓ SettingsManager found! UID system working")
+		print("Sound enabled: ", SettingsManager.sound_enabled)
+	else:
+		print("✗ SettingsManager not found")
 
 func take_damage():
 	# Your damage logic here
