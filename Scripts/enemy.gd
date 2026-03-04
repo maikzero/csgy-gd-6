@@ -37,7 +37,7 @@ func handle_movement():
 	
 	if distance <= attack_range:
 		set_state(State.ATTACK)
-		# Deal damage here
+		player.take_damage(10)
 	else:
 		set_state(State.WALK)
 		velocity = direction * speed
