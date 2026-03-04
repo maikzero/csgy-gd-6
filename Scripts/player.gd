@@ -33,15 +33,12 @@ var _body_col_offset_x: float  # original x offset of body CollisionShape2D
 @onready var hurtbox_col: CollisionShape2D = $Hurtbox/CollisionShape2D
 @onready var body_col: CollisionShape2D = $CollisionShape2D
 @onready var camera: Camera2D = $Camera2D
-<<<<<<< HEAD
 @onready var attack_area: Area2D = $WeaponPivot/Hitbox
 var can_deal_damage: bool = false
 var attacked_enemies: Array = []  # Track enemies hit in this attack
-=======
 @onready var dash_sfx: AudioStreamPlayer = $DashSFX
 @onready var sword_sfx: AudioStreamPlayer = $SwordSFX
 @onready var jump_sfx: AudioStreamPlayer = $JumpSFX
->>>>>>> 0ee6713 (Added sfx for jump, dash, and sword.)
 
 var hit_flash_material: ShaderMaterial
 
