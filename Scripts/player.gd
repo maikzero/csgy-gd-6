@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name Enemy
 
 signal health_changed(new_health: int, max_health: int)
 
@@ -14,7 +15,7 @@ enum State {
 @export var dash_duration: float = 0.275
 @export var max_health: int = 100
 
-var health: int
+var health: int = 10
 var is_dead: bool = false
 var is_invincible: bool = false  # true during dash (i-frames)
 var pending_death: bool = false  # set when hurt animation should lead into death
@@ -22,6 +23,7 @@ var attack_buffered: bool = false  # attack pressed during attack anim → trigg
 var facing_right: bool = true
 var _dash_timer: float = 0.0
 var _body_col_offset_x: float  # original x offset of body CollisionShape2D
+@export var attack_damage: int = 10
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -31,6 +33,9 @@ var _body_col_offset_x: float  # original x offset of body CollisionShape2D
 @onready var hurtbox_col: CollisionShape2D = $Hurtbox/CollisionShape2D
 @onready var body_col: CollisionShape2D = $CollisionShape2D
 @onready var camera: Camera2D = $Camera2D
+@onready var attack_area: Area2D = $WeaponPivot/Hitbox
+var can_deal_damage: bool = false
+var attacked_enemies: Array = []  # Track enemies hit in this attack
 
 var hit_flash_material: ShaderMaterial
 
@@ -51,7 +56,57 @@ func _ready() -> void:
 		new_material.shader = preload("res://Shaders/Player.gdshader")
 		sprite.material = new_material
 		hit_flash_material = new_material
+	
+	attack_area.area_entered.connect(_on_attack_area_entered)
+	attack_area.monitoring = false
+	
+	print("=== PLAYER ATTACK SETUP ===")
+	print("Attack area: ", attack_area)
+	print("Attack area monitoring: ", attack_area.monitoring)
+	print("Attack area collision layer: ", attack_area.collision_layer)
+	print("Attack area collision mask: ", attack_area.collision_mask)
+	print("Attack area connected signals: ", attack_area.area_entered.get_connections())
 
+func _on_attack_area_entered(area: Area2D):
+	print("\n=== ATTACK DETECTION DEBUG ===")
+	print("1. Area entered: ", area.name)
+	print("2. Area class: ", area.get_class())
+	
+	var enemy = area.get_parent()
+	print("3. Parent node: ", enemy.name)
+	print("4. Parent class: ", enemy.get_class())
+	print("5. Parent groups: ", enemy.get_groups())
+	print("6. Parent has 'take_damage'? ", enemy.has_method("take_damage"))
+	#print("7. Current attacking state: ", attacking)
+	print("8. Can deal damage: ", can_deal_damage)
+	
+	# Check if already in attacked_enemies
+	print("9. Already attacked? ", enemy in attacked_enemies)
+	
+	#if not attacking:
+		#print("❌ Not attacking, ignoring")
+		#return
+	
+	if not can_deal_damage:
+		print("❌ Cannot deal damage now")
+		return
+	
+	if enemy in attacked_enemies:
+		print("❌ Already hit this enemy")
+		return
+	
+	if enemy.has_method("take_damage"):
+		print("✅ take_damage found, calling it...")
+		attacked_enemies.append(enemy)
+		enemy.take_damage(attack_damage)
+		print("💥 Damage dealt!")
+	else:
+		print("❌ Enemy missing take_damage method!")
+		print("   Enemy methods: ", enemy.get_method_list().map(func(m): return m["name"]))
+	
+	# Screen shake
+	#if SettingsManager.screen_shake_enabled:
+		#$Camera2D.shake(0.1, 5.0)
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -168,6 +223,55 @@ func _enter_dash() -> void:
 func _enter_attack() -> void:
 	attack_buffered = false
 	_transition_play(State.ATTACK, "attack")
+	
+	attack_area.monitoring = true
+	can_deal_damage = true
+	attacked_enemies.clear()  # Reset for this attack
+	
+	if sprite.flip_h:  # Facing left
+		$WeaponPivot.position = Vector2(-40, 96 - global_position.y)  # Adjust Y to ground level
+	else:  # Facing right
+		$WeaponPivot.position = Vector2(40, 96 - global_position.y)   # Adjust Y to ground leve
+	
+	# For CollisionPolygon2D - use .polygon, not .shape
+	var polygon_node = $WeaponPivot/Hitbox/CollisionPolygon2D
+	var points = polygon_node.polygon
+	
+	if points and points.size() > 0:
+		# Calculate bounds from polygon points
+		var min_x = 0
+		var max_x = 0
+		var min_y = 0
+		var max_y = 0
+		
+		for point in points:
+			min_x = min(min_x, point.x)
+			max_x = max(max_x, point.x)
+			min_y = min(min_y, point.y)
+			max_y = max(max_y, point.y)
+		
+		var width = max_x - min_x
+		var height = max_y - min_y
+		var center = Vector2((min_x + max_x) / 2, (min_y + max_y) / 2)
+		
+		print("Attack area polygon points: ", points.size())
+		print("Attack area bounds: width=", width, " height=", height)
+		print("Attack area local center: ", center)
+		print("Attack area global position: ", polygon_node.global_position)
+	
+	print("Attack area eneabled")
+	print("Attack area monitoring: ", attack_area.monitoring)
+	print("Attack area position: ", attack_area.global_position)
+	print("Attack area scale: ", attack_area.scale)
+	var overlapping = attack_area.get_overlapping_areas()
+	print("Overlapping areas immediately: ", overlapping.size())
+	for area in overlapping:
+		print("  → Overlapping: ", area.name, " (parent: ", area.get_parent().name, ")")
+		print("    Area layer: ", area.collision_layer)
+	# Disable after attack duration
+	await get_tree().create_timer(0.3).timeout  # Match attack animation
+	attack_area.monitoring = false
+	can_deal_damage = false
 
 
 # Only transitions if we're not already in new_state (prevents animation restart).
@@ -277,3 +381,25 @@ func trigger_hit_flash():
 		hit_flash_material.set_shader_parameter("hit_effect", 0.0)
 	else:
 		print("Hit flash disabled")  # Optional debug
+		
+		
+func _process(delta):
+	if can_deal_damage:
+		queue_redraw()
+
+func _draw():
+	if can_deal_damage:
+		var polygon_node = $WeaponPivot/Hitbox/CollisionPolygon2D
+		var points = polygon_node.polygon
+		
+		if points and points.size() > 2:
+			# Convert to global coordinates for drawing
+			var global_points = []
+			var transform = polygon_node.global_transform
+			for point in points:
+				global_points.append(transform * point)
+			
+			# Draw filled polygon with transparency
+			draw_colored_polygon(global_points, Color.RED)  # Just red
+			# Draw outline
+			draw_polyline(global_points + [global_points[0]], Color.RED, 2)

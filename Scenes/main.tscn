@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://cpyir86t1g7t1" path="res://Scenes/player.tscn" id="1_jjgbg"]
 [ext_resource type="Texture2D" uid="uid://gy8om04c3wac" path="res://Assets/oak_woods_v1.0/oak_woods_tileset.png" id="2_21xkr"]
-[ext_resource type="Script" uid="uid://cw4rpmraq02dx" path="res://Scripts/enemy_manager.gd" id="2_bo1nx"]
-[ext_resource type="Script" uid="uid://b3kp4032wf2pd" path="res://Scripts/health_bar.gd" id="2_hlthbr"]
+[ext_resource type="Script" uid="uid://cw4rpmraq02dx" path="res://scripts/enemy_manager.gd" id="2_bo1nx"]
+[ext_resource type="Script" path="res://Scripts/health_bar.gd" id="2_hlthbr"]
 [ext_resource type="PackedScene" uid="uid://cmsd3jl1u58h4" path="res://Scenes/settings_manager.tscn" id="2_smgr"]
 [ext_resource type="Script" uid="uid://dbpecvwhu0xjl" path="res://scripts/camera_shake.gd" id="2_ynf5e"]
 [ext_resource type="PackedScene" uid="uid://b2ubcgh7glj18" path="res://Scenes/boss_andromeda_enemy.tscn" id="3_8gbba"]
@@ -515,6 +515,7 @@ show_percentage = false
 script = ExtResource("2_bo1nx")
 enemy_types = Array[PackedScene]([ExtResource("3_8gbba")])
 elite_enemy_types = Array[PackedScene]([ExtResource("3_8gbba")])
+spawn_area = Rect2(100, 86, 400, 20)
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." unique_id=1088123897]
 

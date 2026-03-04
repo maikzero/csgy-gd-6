@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 # Movement
 @export var speed: float = 80.0
-@export var attack_range: float = 50.0
+@export var attack_range: float = 30.0
 @export var attack_damage: int = 10
 @export var attack_cooldown: float = 1.0
 
@@ -44,6 +44,15 @@ func _ready():
 	
 	animated_sprite.animation_finished.connect(_on_animation_finished)
 	
+		# Log enemy position on spawn
+	print("🏃 Enemy spawned at: ", global_position)
+	print("   Hitbox position: ", $HitboxArea.global_position)
+	
+	if has_node("HitboxArea/CollisionShape2D"):
+		var shape_node = $HitboxArea/CollisionShape2D
+		if shape_node.shape is RectangleShape2D:
+			print("📏 CURRENT HITBOX SIZE: ", shape_node.shape.size)
+	
 	# Try to play something
 	change_state(State.IDLE)
 	if attack_timer:
@@ -77,6 +86,21 @@ func _ready():
 		#add_child(hurt_timer)
 	print("Attack timer exists: ", attack_timer != null)
 	print("Hurt timer exists: ", hurt_timer != null)
+	
+	if has_node("HitboxArea"):
+		var hitbox = $HitboxArea
+		print("=== ENEMY HITBOX SETUP ===")
+		print("Hitbox exists: ", hitbox)
+		print("Hitbox collision layer: ", hitbox.collision_layer)
+		print("Hitbox collision mask: ", hitbox.collision_mask)
+		print("Hitbox has shape: ", hitbox.get_child(0) is CollisionShape2D)
+		
+		# Check which layers are enabled
+		for i in range(1, 20):
+			if hitbox.get_collision_layer_value(i):
+				print("  Layer ", i, " enabled")
+	else:
+		print("❌ No HitboxArea node found!")
 	
 	if attack_timer:
 		print("Attack timer wait time: ", attack_timer.wait_time)
@@ -199,6 +223,10 @@ func _physics_process(delta):
 	
 	# Update sprite facing direction
 	update_facing_direction(direction)
+	
+	if Engine.get_physics_frames() % 60 == 0:
+		print("Enemy at: ", global_position, " (distance to player: ", 
+			  global_position.distance_to(player.global_position) if player else 0, ")")
 
 func update_facing_direction(direction: Vector2):
 	if direction.x != 0:
@@ -275,10 +303,10 @@ func take_damage(damage: int):
 		blood_particles.emitting = true
 	
 	# 4. Screen Shake
-	if SettingsManager.screen_shake_enabled:
-		var camera = get_viewport().get_camera_2d()
-		if camera and camera.has_method("shake"):
-			camera.shake(0.2, 5, 10)
+	#if SettingsManager.screen_shake_enabled:
+		#var camera = get_viewport().get_camera_2d()
+		#if camera and camera.has_method("shake"):
+			#camera.shake(0.2, 5, 10)
 	
 	# Check for death
 	if health <= 0:
@@ -295,7 +323,7 @@ func die():
 	play_animation("death")
 	
 	# Disable collision so player can run through
-	$CollisionShape2D.disabled = true
+	#$CollisionShape2D.disabled = true
 	
 	# Remove enemy after animation finishes
 	await get_tree().create_timer(death_remove_delay).timeout
@@ -324,3 +352,5 @@ func _on_animated_sprite_2d_animation_finished():
 			play_animation("idle")
 		else:
 			play_animation("run")
+			
+			

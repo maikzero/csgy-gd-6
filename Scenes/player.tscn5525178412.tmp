@@ -1041,6 +1041,12 @@ _data = {
 
 [node name="Player" type="CharacterBody2D" unique_id=975744696 groups=["player"]]
 script = ExtResource("1_f5f5t")
+speed = null
+jump_velocity = null
+dash_speed = null
+dash_duration = null
+max_health = null
+attack_damage = null
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=660705950]
 material = SubResource("ShaderMaterial_by7i4")
