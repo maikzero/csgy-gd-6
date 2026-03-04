@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://cw4rpmraq02dx" path="res://Scripts/enemy_manager.gd" id="2_bo1nx"]
 [ext_resource type="Script" uid="uid://b3kp4032wf2pd" path="res://Scripts/health_bar.gd" id="2_hlthbr"]
 [ext_resource type="PackedScene" uid="uid://cmsd3jl1u58h4" path="res://Scenes/settings_manager.tscn" id="2_smgr"]
+[ext_resource type="Script" uid="uid://dbpecvwhu0xjl" path="res://scripts/camera_shake.gd" id="2_ynf5e"]
 [ext_resource type="PackedScene" uid="uid://b2ubcgh7glj18" path="res://Scenes/boss_andromeda_enemy.tscn" id="3_8gbba"]
 [ext_resource type="Texture2D" uid="uid://b8lbe7ir60osp" path="res://Assets/oak_woods_v1.0/background/background_layer_1.png" id="3_kry3j"]
 [ext_resource type="Texture2D" uid="uid://dnx6bvstt3tfo" path="res://Assets/oak_woods_v1.0/background/background_layer_2.png" id="4_21xkr"]
@@ -475,6 +476,7 @@ limit_top = 30
 limit_right = 400
 limit_bottom = 350
 position_smoothing_enabled = true
+script = ExtResource("2_ynf5e")
 
 [node name="Ground" type="Node2D" parent="." unique_id=1619628333]
 
