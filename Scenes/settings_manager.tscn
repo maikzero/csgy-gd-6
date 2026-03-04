@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cmsd3jl1u58h4"]
 
-[ext_resource type="Script" uid="uid://cuvbr7cawutu5" path="res://scripts/UI_manager.gd" id="1_b7ibd"]
+[ext_resource type="Script" uid="uid://cuvbr7cawutu5" path="res://scripts/settings_manager.gd" id="1_b7ibd"]
 
 [node name="SettingsManager" type="Control" unique_id=1670002564]
 layout_mode = 3

@@ -17,7 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-SettingsManager="*uid://csa5bjig3jjop"
+SettingsManager="*uid://cmsd3jl1u58h4"
 
 [input]
 
