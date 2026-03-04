@@ -33,9 +33,15 @@ var _body_col_offset_x: float  # original x offset of body CollisionShape2D
 @onready var hurtbox_col: CollisionShape2D = $Hurtbox/CollisionShape2D
 @onready var body_col: CollisionShape2D = $CollisionShape2D
 @onready var camera: Camera2D = $Camera2D
+<<<<<<< HEAD
 @onready var attack_area: Area2D = $WeaponPivot/Hitbox
 var can_deal_damage: bool = false
 var attacked_enemies: Array = []  # Track enemies hit in this attack
+=======
+@onready var dash_sfx: AudioStreamPlayer = $DashSFX
+@onready var sword_sfx: AudioStreamPlayer = $SwordSFX
+@onready var jump_sfx: AudioStreamPlayer = $JumpSFX
+>>>>>>> 0ee6713 (Added sfx for jump, dash, and sword.)
 
 var hit_flash_material: ShaderMaterial
 
@@ -204,11 +210,15 @@ func _process_state() -> void:
 # ── Input helpers ───────────────────────────────────────────────────────────
 
 func _enter_jump() -> void:
+	if SettingsManager.sound_enabled:
+		jump_sfx.play()
 	velocity.y = jump_velocity
 	_transition_play(State.JUMP, "jump")
 
 
 func _enter_dash() -> void:
+	if SettingsManager.sound_enabled:
+		dash_sfx.play()
 	var dir := Input.get_axis("left", "right")
 	if dir != 0.0:
 		facing_right = dir > 0
@@ -221,6 +231,8 @@ func _enter_dash() -> void:
 
 
 func _enter_attack() -> void:
+	if SettingsManager.sound_enabled:
+		sword_sfx.play()
 	attack_buffered = false
 	_transition_play(State.ATTACK, "attack")
 	
