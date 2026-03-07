@@ -1277,4 +1277,3 @@ stream = ExtResource("73_jmelf")
 
 [node name="GameOverSFX" type="AudioStreamPlayer" parent="." unique_id=838036578]
 stream = ExtResource("74_bjdqd")
-volume_db = -10.0
