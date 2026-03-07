@@ -39,6 +39,8 @@ var _body_col_offset_x: float  # original x offset of body CollisionShape2D
 @onready var sword_sfx: AudioStreamPlayer = $SwordSFX
 @onready var jump_sfx: AudioStreamPlayer = $JumpSFX
 
+const BLOOD_PARTICLES = preload("res://Scenes/blood_particles.tscn")
+
 var hit_flash_material: ShaderMaterial
 
 func _ready() -> void:
@@ -66,12 +68,13 @@ func _ready() -> void:
 
 func _on_hitbox_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy") and body.has_method("take_damage"):
-		body.take_damage(attack_damage)
+		var damage := attack_damage * 2 if sm.current_state == State.DASH_ATTACK else attack_damage
+		body.take_damage(damage)
 
 
 func _on_hurtbox_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy") and "attack_damage" in body and body.is_attacking:
-		take_damage(body.attack_damage)
+		take_damage(body.attack_damage, body.global_position)
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -266,7 +269,7 @@ func _return_to_ground_state() -> void:
 # ── Public API ───────────────────────────────────────────────────────────────
 
 # Call this from enemy hitbox signals or other damage sources.
-func take_damage(amount: int) -> void:
+func take_damage(amount: int, from: Vector2 = Vector2.ZERO) -> void:
 	# Invincible during dash and while already playing hurt animation
 	if is_dead or is_invincible or sm.current_state == State.HURT:
 		return
@@ -281,6 +284,9 @@ func take_damage(amount: int) -> void:
 	
 	# Trigger the flash effect
 	trigger_hit_flash()
+	if SettingsManager.blood_enabled:
+		var dir := (global_position - from).normalized() if from != Vector2.ZERO else Vector2.RIGHT.rotated(randf_range(0.0, TAU))
+		_spawn_blood(dir)
 	if SettingsManager.screen_shake_enabled:
 		camera.shake(0.2, 3.0)
 	_transition_play(State.HURT, "hurt")
@@ -290,7 +296,7 @@ func trigger_hit_flash():
 	
 	if SettingsManager.hit_flash_enabled:
 		# Turn flash ON
-		hit_flash_material.set_shader_parameter("hit_effect", 1.0)
+		hit_flash_material.set_shader_parameter("hit_effect", 0.5)
 		
 		# Turn flash OFF after 0.1 seconds
 		await get_tree().create_timer(0.1).timeout
@@ -301,3 +307,9 @@ func trigger_hit_flash():
 		
 func _process(_delta: float) -> void:
 	pass
+
+func _spawn_blood(direction: Vector2) -> void:
+	var blood = BLOOD_PARTICLES.instantiate()
+	blood.global_position = global_position
+	blood.rotation = direction.angle()
+	get_parent().add_child(blood)

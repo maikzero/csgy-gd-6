@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://b82hye3q0vuvh"]
+
+[ext_resource type="Script" uid="uid://bex02x00yhca2" path="res://Scripts/blood_particle.gd" id="1_8044i"]
+
+[sub_resource type="Curve" id="Curve_itgge"]
+_data = [Vector2(0, 1), 0.0, -0.03862338, 0, 0, Vector2(1, 0), -2.6779068, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_qja0s"]
+curve = SubResource("Curve_itgge")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3k0u3"]
+particle_flag_disable_z = true
+initial_velocity_min = 100.0
+initial_velocity_max = 250.0
+gravity = Vector3(0, 500, 0)
+scale_min = 2.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_qja0s")
+color = Color(0.39607844, 0, 0, 1)
+
+[node name="BloodParticles" type="GPUParticles2D" unique_id=1473503048]
+emitting = false
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_3k0u3")
+script = ExtResource("1_8044i")

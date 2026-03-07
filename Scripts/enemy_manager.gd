@@ -49,7 +49,7 @@ func _spawn_enemy() -> void:
 func _get_spawn_position() -> Vector2:
 	var center_x := player.global_position.x if player else 0.0
 	for _i in 30:
-		var x := randf_range(center_x - spawn_half_width, center_x + spawn_half_width)
+		var x := clampf(randf_range(center_x - spawn_half_width, center_x + spawn_half_width), -400.0, 400.0)
 		var candidate := Vector2(x, spawn_y)
 		if not player or candidate.distance_to(player.global_position) >= min_distance_from_player:
 			return candidate

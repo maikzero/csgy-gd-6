@@ -22,10 +22,11 @@ var current_state: State = State.IDLE
 
 # Node references
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var blood_particles: GPUParticles2D = $BloodParticles
 @onready var audio_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
 @onready var attack_timer: Timer = $AttackTimer
 @onready var body_col: CollisionShape2D = $CollisionShape2D
+
+const BLOOD_PARTICLES = preload("res://Scenes/blood_particles.tscn")
 
 # Shader material for hit flash
 var hit_flash_material: ShaderMaterial
@@ -68,16 +69,16 @@ func enter_state(state: State):
 
 		State.HIT:
 			animated_sprite.play("hit")
-			if SettingsManager.blood_enabled:
-				blood_particles.emitting = true
 			if SettingsManager.sound_enabled:
 				audio_player.play()
 
 		State.DEAD:
 			is_attacking = false
 			animated_sprite.play("death")
-			body_col.disabled = true
-			set_physics_process(false)
+			# Remove from own layer so player can pass through,
+			# but keep ground in mask so gravity still lands them
+			collision_layer = 0
+			collision_mask = 1
 
 func _on_animation_finished():
 	match current_state:
@@ -100,7 +101,13 @@ func _on_animation_finished():
 		State.DEAD:
 			queue_free()
 
-func _physics_process(_delta):
+func _physics_process(delta):
+	if current_state == State.DEAD:
+		if not is_on_floor():
+			velocity += get_gravity() * delta
+			move_and_slide()
+		return
+
 	if is_dead or current_state == State.HIT or current_state == State.ATTACK:
 		return
 
@@ -138,11 +145,12 @@ func take_damage(damage: int):
 	if SettingsManager.sound_enabled:
 		audio_player.play()
 	if SettingsManager.hit_flash_enabled and hit_flash_material:
-		hit_flash_material.set_shader_parameter("hit_effect", 1.0)
+		hit_flash_material.set_shader_parameter("hit_effect", 0.5)
 		await get_tree().create_timer(0.1).timeout
 		hit_flash_material.set_shader_parameter("hit_effect", 0.0)
 	if SettingsManager.blood_enabled:
-		blood_particles.emitting = true
+		var dir := (global_position - player.global_position).normalized() if player else Vector2.RIGHT
+		_spawn_blood(dir)
 
 	if health <= 0:
 		pending_death = true
@@ -151,3 +159,9 @@ func take_damage(damage: int):
 
 func _on_attack_timer_timeout():
 	can_attack = true
+
+func _spawn_blood(direction: Vector2) -> void:
+	var blood = BLOOD_PARTICLES.instantiate()
+	blood.global_position = global_position
+	blood.rotation = direction.angle()
+	get_parent().add_child(blood)

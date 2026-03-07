@@ -1,11 +1,11 @@
 extends Control
 
-var sound_enabled: bool = true
-var hit_flash_enabled: bool = true
-var blood_enabled: bool = true
+static var sound_enabled: bool = true
+static var hit_flash_enabled: bool = true
+static var blood_enabled: bool = true
 static var screen_shake_enabled: bool = true
-var parallax_enabled: bool = true
-var delay_bar_enabled: bool = true
+static var parallax_enabled: bool = true
+static var delay_bar_enabled: bool = true
 
 signal delay_bar_toggled(enabled: bool)
 
