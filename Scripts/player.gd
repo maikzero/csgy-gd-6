@@ -36,8 +36,12 @@ var _body_col_offset_x: float  # original x offset of body CollisionShape2D
 @onready var attack_area: Area2D = $WeaponPivot/Hitbox
 @onready var hitbox_col: CollisionShape2D = $WeaponPivot/Hitbox/CollisionShape2D
 @onready var dash_sfx: AudioStreamPlayer = $DashSFX
-@onready var sword_sfx: AudioStreamPlayer = $SwordSFX
+@onready var attack1_sfx: AudioStreamPlayer = $AttackSFX
+@onready var attack2_sfx: AudioStreamPlayer = $AttackSFX2
+@onready var dash_attack_sfx: AudioStreamPlayer = $AttackSFX3
 @onready var jump_sfx: AudioStreamPlayer = $JumpSFX
+@onready var hurt_sfx: AudioStreamPlayer = $HurtSFX
+@onready var game_over_sfx: AudioStreamPlayer = $GameOverSFX
 
 const BLOOD_PARTICLES = preload("res://Scenes/blood_particles.tscn")
 
@@ -70,6 +74,8 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy") and body.has_method("take_damage"):
 		var damage := attack_damage * 2 if sm.current_state == State.DASH_ATTACK else attack_damage
 		body.take_damage(damage)
+		if sm.current_state == State.DASH_ATTACK and SettingsManager.screen_shake_enabled:
+			camera.shake(0.1, 2.0)
 
 
 func _on_hurtbox_body_entered(body: Node2D) -> void:
@@ -154,6 +160,8 @@ func _process_state() -> void:
 				# End i-frames and launch dash_attack
 				is_invincible = false
 				hurtbox_col.disabled = false
+				if SettingsManager.sound_enabled:
+					dash_attack_sfx.play()
 				_transition_play(State.DASH_ATTACK, "dash_attack")
 			# Transition to IDLE handled by animation_finished (if attack not pressed)
 
@@ -196,7 +204,7 @@ func _enter_dash() -> void:
 func _enter_attack() -> void:
 	attack_buffered = false
 	if SettingsManager.sound_enabled:
-		sword_sfx.play()
+		attack1_sfx.play()
 	_transition_play(State.ATTACK, "attack")
 
 
@@ -231,6 +239,8 @@ func _on_animation_finished(anim_name: StringName) -> void:
 		"attack":
 			if attack_buffered:
 				attack_buffered = false
+				if SettingsManager.sound_enabled:
+					attack2_sfx.play()
 				_transition_play(State.ATTACK2, "attack2")
 			else:
 				_return_to_ground_state()
@@ -246,11 +256,13 @@ func _on_animation_finished(anim_name: StringName) -> void:
 			if pending_death:
 				pending_death = false
 				is_dead = true
+				if SettingsManager.sound_enabled:
+					game_over_sfx.play()
 				_transition_play(State.DEATH, "death")
 			else:
 				_return_to_ground_state()
 		"death":
-			pass  # Freeze on last frame; game logic handles respawn/game-over
+			pass
 		"up_to_fall":
 			_transition_play(State.FALL, "fall")
 
@@ -278,11 +290,9 @@ func take_damage(amount: int, from: Vector2 = Vector2.ZERO) -> void:
 	if health == 0:
 		pending_death = true
 	health_changed.emit(health, max_health)
-		
-	#Your damage logic here
-	print("Player took damage!")
 	
-	# Trigger the flash effect
+	if SettingsManager.sound_enabled:
+		hurt_sfx.play()
 	trigger_hit_flash()
 	if SettingsManager.blood_enabled:
 		var dir := (global_position - from).normalized() if from != Vector2.ZERO else Vector2.RIGHT.rotated(randf_range(0.0, TAU))
@@ -303,10 +313,6 @@ func trigger_hit_flash():
 		hit_flash_material.set_shader_parameter("hit_effect", 0.0)
 	else:
 		print("Hit flash disabled")  # Optional debug
-		
-		
-func _process(_delta: float) -> void:
-	pass
 
 func _spawn_blood(direction: Vector2) -> void:
 	var blood = BLOOD_PARTICLES.instantiate()

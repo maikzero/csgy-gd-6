@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://cl8f1vwqa5g7e" path="res://Scripts/enemy.gd" id="1_4bdhp"]
 [ext_resource type="SpriteFrames" uid="uid://cngcd26xleb0d" path="res://addons/duelyst_animated_sprites/assets/spriteframes/units/boss_andromeda.tres" id="2_xruc2"]
+[ext_resource type="AudioStream" uid="uid://c8mhtt65hsv3p" path="res://Audio/SFX/Impact.wav" id="3_rje5s"]
+[ext_resource type="AudioStream" uid="uid://cjlffcunhvd5r" path="res://Audio/SFX/Wind2.wav" id="3_vm050"]
+[ext_resource type="AudioStream" uid="uid://tojolb1trwsm" path="res://Audio/SFX/enemy_death.wav" id="4_vm050"]
 
 [sub_resource type="Shader" id="Shader_4bdhp"]
 resource_local_to_scene = true
@@ -38,11 +41,6 @@ size = Vector2(20, 37)
 collision_layer = 4
 collision_mask = 13
 script = ExtResource("1_4bdhp")
-speed = null
-attack_range = null
-attack_damage = null
-attack_cooldown = null
-health = null
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=692104439 groups=["enemy"]]
 material = SubResource("ShaderMaterial_xruc2")
@@ -53,8 +51,6 @@ animation = &"run"
 position = Vector2(-1, 10.5)
 shape = SubResource("RectangleShape2D_4bdhp")
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=773228366]
-
 [node name="AttackTimer" type="Timer" parent="." unique_id=1841809149]
 wait_time = 2.0
 one_shot = true
@@ -62,3 +58,15 @@ one_shot = true
 [node name="HurtTimer" type="Timer" parent="." unique_id=940031649]
 wait_time = 0.3
 one_shot = true
+
+[node name="WindSFX" type="AudioStreamPlayer2D" parent="." unique_id=773228366]
+stream = ExtResource("3_vm050")
+volume_db = -20.0
+
+[node name="ImpactSFX" type="AudioStreamPlayer2D" parent="." unique_id=1905941334]
+stream = ExtResource("3_rje5s")
+volume_db = -10.0
+
+[node name="DeathSFX" type="AudioStreamPlayer2D" parent="." unique_id=1238346519]
+stream = ExtResource("4_vm050")
+volume_db = -10.0

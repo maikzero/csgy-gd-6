@@ -1,5 +1,6 @@
 extends Control
 
+static var music_enabled: bool = true
 static var sound_enabled: bool = true
 static var hit_flash_enabled: bool = true
 static var blood_enabled: bool = true
@@ -12,13 +13,15 @@ signal delay_bar_toggled(enabled: bool)
 @onready var panel: PanelContainer = $Panel
 @onready var settings_button: Button = $SettingsButton
 @onready var close_button: Button = $Panel/MarginContainer/VBoxContainer/TitleRow/CloseButton
-@onready var sound_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/SoundRow/SoundToggle
+@onready var music_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/MusicRow/MusicToggle
+@onready var sfx_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/SFXRow/SFXToggle
 @onready var hit_flash_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/HitFlashRow/HitFlashToggle
 @onready var blood_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/BloodRow/BloodToggle
 @onready var screen_shake_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/ScreenShakeRow/ScreenShakeToggle
 @onready var parallax_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/ParallaxRow/ParallaxToggle
 @onready var delay_bar_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/DelayBarRow/DelayBarToggle
 @onready var parallax_bg: ParallaxBackground = get_tree().current_scene.get_node("ParallaxBackground")
+@onready var bgm: AudioStreamPlayer = get_tree().current_scene.get_node("BGM")
 
 var _parallax_layer_scales: Array[Vector2] = []
 
@@ -30,10 +33,11 @@ func _ready() -> void:
 			_parallax_layer_scales.append(layer.motion_scale)
 	settings_button.pressed.connect(_on_settings_button_pressed)
 	close_button.pressed.connect(_on_close_button_pressed)
-	sound_toggle.toggled.connect(func(on): 
-		sound_enabled = on
-		_apply_sound()
+	music_toggle.toggled.connect(func(on):
+		music_enabled = on
+		_apply_music()
 	)
+	sfx_toggle.toggled.connect(func(on): sound_enabled = on)
 	hit_flash_toggle.toggled.connect(func(on): hit_flash_enabled = on)
 	blood_toggle.toggled.connect(func(on): blood_enabled = on)
 	SettingsManager.screen_shake_enabled = screen_shake_toggle.button_pressed
@@ -43,7 +47,7 @@ func _ready() -> void:
 		delay_bar_enabled = on
 		delay_bar_toggled.emit(on)
 	)
-	_apply_sound()
+	_apply_music()
 
 
 func _on_settings_button_pressed() -> void:
@@ -56,13 +60,19 @@ func _on_close_button_pressed() -> void:
 	panel.visible = false
 	settings_button.visible = true
 	get_tree().paused = false
+	_apply_music()
 
 
 # Programmatic toggles (for other scripts to call)
+func toggle_music() -> void:
+	music_enabled = not music_enabled
+	music_toggle.button_pressed = music_enabled
+	_apply_music()
+
+
 func toggle_sound() -> void:
 	sound_enabled = not sound_enabled
-	sound_toggle.button_pressed = sound_enabled
-	_apply_sound()
+	sfx_toggle.button_pressed = sound_enabled
 
 
 func toggle_hit_flash() -> void:
@@ -95,7 +105,6 @@ func _apply_parallax(on: bool) -> void:
 		if layer is ParallaxLayer:
 			layer.motion_scale = _parallax_layer_scales[i] if on else Vector2.ZERO
 			i += 1
-			
-func _apply_sound() -> void:
-	var master_bus := AudioServer.get_bus_index("Master")
-	AudioServer.set_bus_mute(master_bus, !sound_enabled)
+
+func _apply_music() -> void:
+	bgm.stream_paused = not music_enabled

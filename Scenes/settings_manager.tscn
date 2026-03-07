@@ -65,15 +65,27 @@ text = "✕"
 [node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer" unique_id=1168589988]
 layout_mode = 2
 
-[node name="SoundRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=157736974]
+[node name="MusicRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=157736974]
 layout_mode = 2
 
-[node name="SoundLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/SoundRow" unique_id=697531160]
+[node name="MusicLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/MusicRow" unique_id=697531160]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Sound"
+text = "Music"
 
-[node name="SoundToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/SoundRow" unique_id=147851671]
+[node name="MusicToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/MusicRow" unique_id=147851671]
+layout_mode = 2
+button_pressed = true
+
+[node name="SFXRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SFXLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/SFXRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Sound Effects"
+
+[node name="SFXToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/SFXRow"]
 layout_mode = 2
 button_pressed = true
 

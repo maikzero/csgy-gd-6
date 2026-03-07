@@ -22,7 +22,9 @@ var current_state: State = State.IDLE
 
 # Node references
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var audio_player: AudioStreamPlayer2D = $AudioStreamPlayer2D
+@onready var wind_sfx: AudioStreamPlayer2D = $WindSFX
+@onready var impact_sfx: AudioStreamPlayer2D = $ImpactSFX
+@onready var death_sfx: AudioStreamPlayer2D = $DeathSFX
 @onready var attack_timer: Timer = $AttackTimer
 @onready var body_col: CollisionShape2D = $CollisionShape2D
 
@@ -39,6 +41,8 @@ func _ready():
 	if animated_sprite.material is ShaderMaterial:
 		hit_flash_material = animated_sprite.material
 
+	if SettingsManager.sound_enabled:
+		wind_sfx.play()
 	change_state(State.IDLE)
 
 func change_state(new_state: State):
@@ -69,12 +73,11 @@ func enter_state(state: State):
 
 		State.HIT:
 			animated_sprite.play("hit")
-			if SettingsManager.sound_enabled:
-				audio_player.play()
 
 		State.DEAD:
 			is_attacking = false
 			animated_sprite.play("death")
+			wind_sfx.stop()
 			# Remove from own layer so player can pass through,
 			# but keep ground in mask so gravity still lands them
 			collision_layer = 0
@@ -141,9 +144,14 @@ func take_damage(damage: int):
 		return
 
 	health -= damage
+	if health <= 0:
+		pending_death = true
 
 	if SettingsManager.sound_enabled:
-		audio_player.play()
+		if not pending_death:
+			impact_sfx.play()
+		else:
+			death_sfx.play()
 	if SettingsManager.hit_flash_enabled and hit_flash_material:
 		hit_flash_material.set_shader_parameter("hit_effect", 0.5)
 		await get_tree().create_timer(0.1).timeout
@@ -151,9 +159,6 @@ func take_damage(damage: int):
 	if SettingsManager.blood_enabled:
 		var dir := (global_position - player.global_position).normalized() if player else Vector2.RIGHT
 		_spawn_blood(dir)
-
-	if health <= 0:
-		pending_death = true
 	
 	change_state(State.HIT)
 
