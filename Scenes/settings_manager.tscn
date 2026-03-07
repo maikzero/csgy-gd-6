@@ -160,3 +160,15 @@ text = "Delay Health Bar"
 [node name="DelayBarToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/DelayBarRow" unique_id=408193762]
 layout_mode = 2
 button_pressed = true
+
+[node name="RetroFilterRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RetroFilterLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/RetroFilterRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Retro Filter"
+
+[node name="RetroFilterToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/RetroFilterRow"]
+layout_mode = 2
+button_pressed = false

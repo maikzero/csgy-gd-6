@@ -6,6 +6,7 @@ static var hit_flash_enabled: bool = true
 static var blood_enabled: bool = true
 static var screen_shake_enabled: bool = true
 static var hit_lag_enabled: bool = true
+static var retro_filter_enabled: bool = false
 static var parallax_enabled: bool = true
 static var delay_bar_enabled: bool = true
 
@@ -22,8 +23,10 @@ signal delay_bar_toggled(enabled: bool)
 @onready var hit_lag_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/HitLagRow/HitLagToggle
 @onready var parallax_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/ParallaxRow/ParallaxToggle
 @onready var delay_bar_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/DelayBarRow/DelayBarToggle
+@onready var retro_filter_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/RetroFilterRow/RetroFilterToggle
 @onready var parallax_bg: ParallaxBackground = get_tree().current_scene.get_node("ParallaxBackground")
 @onready var bgm: AudioStreamPlayer = get_tree().current_scene.get_node("BGM")
+@onready var retro_filter: CanvasLayer = get_tree().current_scene.get_node("RetroFilter")
 
 var _parallax_layer_scales: Array[Vector2] = []
 
@@ -50,7 +53,12 @@ func _ready() -> void:
 		delay_bar_enabled = on
 		delay_bar_toggled.emit(on)
 	)
+	retro_filter_toggle.toggled.connect(func(on):
+		retro_filter_enabled = on
+		retro_filter.visible = on
+	)
 	_apply_music()
+	retro_filter.visible = retro_filter_enabled
 
 
 func _on_settings_button_pressed() -> void:

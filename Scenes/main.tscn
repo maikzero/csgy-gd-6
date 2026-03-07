@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://dnx6bvstt3tfo" path="res://Assets/oak_woods_v1.0/background/background_layer_2.png" id="4_21xkr"]
 [ext_resource type="Texture2D" uid="uid://ctdry6ak13lvp" path="res://Assets/oak_woods_v1.0/background/background_layer_3.png" id="5_6bp64"]
 [ext_resource type="AudioStream" uid="uid://dgu0sof3syju4" path="res://Audio/BGM/13 - Mystical.ogg" id="11_d1ilt"]
+[ext_resource type="Shader" path="res://Shaders/RetroFilter.gdshader" id="12_retro"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6bp64"]
 texture = ExtResource("2_21xkr")
@@ -464,6 +465,11 @@ expand_margin_bottom = 5.0
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6iyac"]
 bg_color = Color(0.81060827, 0.03607294, 1.92523e-07, 1)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_retro"]
+shader = ExtResource("12_retro")
+shader_parameter/scanline_intensity = 0.25
+shader_parameter/vignette_intensity = 0.5
+
 [node name="Main" type="Node2D" unique_id=1015059756]
 
 [node name="Player" parent="." unique_id=975744696 instance=ExtResource("1_jjgbg")]
@@ -548,3 +554,16 @@ stream = ExtResource("11_d1ilt")
 volume_db = -20.0
 autoplay = true
 parameters/looping = true
+
+[node name="RetroFilter" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="ColorRect" type="ColorRect" parent="RetroFilter"]
+material = SubResource("ShaderMaterial_retro")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
