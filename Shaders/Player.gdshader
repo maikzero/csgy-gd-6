@@ -1,5 +1,6 @@
 // player.gdshader
 shader_type canvas_item;
+render_mode blend_mix;
 
 // Flash intensity - 0 = normal, 1 = full flash color
 uniform float hit_effect : hint_range(0, 1) = 0.0;
@@ -15,5 +16,6 @@ void fragment() {
     vec4 final_color = mix(original_color, hit_color, hit_effect);
     
     // Keep original transparency
-    COLOR = vec4(final_color.rgb, original_color.a);
+    COLOR.rgb = final_color.rgb;
+    COLOR.a = original_color.a * COLOR.a;
 }

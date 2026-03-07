@@ -107,7 +107,7 @@ layout_mode = 2
 [node name="BloodLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/BloodRow" unique_id=1248129015]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Blood Effects"
+text = "Particle Effects"
 
 [node name="BloodToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/BloodRow" unique_id=538702503]
 layout_mode = 2

@@ -1,36 +1,15 @@
 [gd_scene format=3 uid="uid://b2ubcgh7glj18"]
 
 [ext_resource type="Script" uid="uid://cl8f1vwqa5g7e" path="res://Scripts/enemy.gd" id="1_4bdhp"]
+[ext_resource type="Shader" uid="uid://bqvon5q0id1hl" path="res://Shaders/Player.gdshader" id="2_rje5s"]
 [ext_resource type="SpriteFrames" uid="uid://cngcd26xleb0d" path="res://addons/duelyst_animated_sprites/assets/spriteframes/units/boss_andromeda.tres" id="2_xruc2"]
 [ext_resource type="AudioStream" uid="uid://c8mhtt65hsv3p" path="res://Audio/SFX/Impact.wav" id="3_rje5s"]
 [ext_resource type="AudioStream" uid="uid://cjlffcunhvd5r" path="res://Audio/SFX/Wind2.wav" id="3_vm050"]
 [ext_resource type="AudioStream" uid="uid://tojolb1trwsm" path="res://Audio/SFX/enemy_death.wav" id="4_vm050"]
 
-[sub_resource type="Shader" id="Shader_4bdhp"]
-resource_local_to_scene = true
-code = "// player.gdshader
-shader_type canvas_item;
-
-// Flash intensity - 0 = normal, 1 = full flash color
-uniform float hit_effect : hint_range(0, 1) = 0.0;
-
-// What color to flash (white by default, change to red if you want)
-uniform vec4 hit_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
-
-void fragment() {
-    // Get the original pixel color from the sprite
-    vec4 original_color = texture(TEXTURE, UV);
-    
-    // Mix between original and hit color based on hit_effect
-    vec4 final_color = mix(original_color, hit_color, hit_effect);
-    
-    // Keep original transparency
-    COLOR = vec4(final_color.rgb, original_color.a);
-}"
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xruc2"]
 resource_local_to_scene = true
-shader = SubResource("Shader_4bdhp")
+shader = ExtResource("2_rje5s")
 shader_parameter/hit_effect = 0.0
 shader_parameter/hit_color = Color(0.8352941, 0, 0, 0.47058824)
 
@@ -45,7 +24,9 @@ script = ExtResource("1_4bdhp")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=692104439 groups=["enemy"]]
 material = SubResource("ShaderMaterial_xruc2")
 sprite_frames = ExtResource("2_xruc2")
-animation = &"run"
+animation = &"death"
+frame = 12
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=197480148]
 position = Vector2(-1, 10.5)

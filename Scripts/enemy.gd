@@ -5,6 +5,7 @@ extends CharacterBody2D
 @export var attack_range: float = 30.0
 @export var attack_damage: int = 10
 @export var attack_cooldown: float = 1.0
+@export var death_particle_delay: float = 0.6
 
 # Combat
 @export var health: int = 3
@@ -29,6 +30,7 @@ var current_state: State = State.IDLE
 @onready var body_col: CollisionShape2D = $CollisionShape2D
 
 const BLOOD_PARTICLES = preload("res://Scenes/blood_particles.tscn")
+const DEATH_PARTICLES = preload("res://Scenes/death_particles.tscn")
 
 # Shader material for hit flash
 var hit_flash_material: ShaderMaterial
@@ -78,10 +80,10 @@ func enter_state(state: State):
 			is_attacking = false
 			animated_sprite.play("death")
 			wind_sfx.stop()
-			# Remove from own layer so player can pass through,
-			# but keep ground in mask so gravity still lands them
 			collision_layer = 0
 			collision_mask = 1
+			if SettingsManager.particles_enabled:
+				get_tree().create_timer(death_particle_delay).timeout.connect(_spawn_death_particles)
 
 func _on_animation_finished():
 	match current_state:
@@ -102,7 +104,12 @@ func _on_animation_finished():
 				change_state(State.RUN)
 
 		State.DEAD:
-			queue_free()
+			if SettingsManager.particles_enabled:
+				var tween = create_tween()
+				tween.tween_property(animated_sprite, "modulate:a", 0.0, 0.6)
+				tween.tween_callback(queue_free)
+			else:
+				queue_free()
 
 func _physics_process(delta):
 	if current_state == State.DEAD:
@@ -156,7 +163,7 @@ func take_damage(damage: int):
 		hit_flash_material.set_shader_parameter("hit_effect", 0.5)
 		await get_tree().create_timer(0.1).timeout
 		hit_flash_material.set_shader_parameter("hit_effect", 0.0)
-	if SettingsManager.blood_enabled:
+	if SettingsManager.particles_enabled:
 		var dir := (global_position - player.global_position).normalized() if player else Vector2.RIGHT
 		_spawn_blood(dir)
 	
@@ -170,3 +177,12 @@ func _spawn_blood(direction: Vector2) -> void:
 	blood.global_position = global_position
 	blood.rotation = direction.angle()
 	get_parent().add_child(blood)
+
+func _spawn_death_particles() -> void:
+	var particles = DEATH_PARTICLES.instantiate()
+	particles.global_position = global_position + Vector2(0, 20)
+	particles.rotation = randf_range(0.0, TAU)
+	get_parent().add_child(particles)
+	var tween = create_tween()
+	tween.tween_property(animated_sprite, "modulate:a", 0.0, 0.6)
+	tween.tween_callback(queue_free)

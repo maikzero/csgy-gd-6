@@ -3,7 +3,7 @@ extends Control
 static var music_enabled: bool = true
 static var sound_enabled: bool = true
 static var hit_flash_enabled: bool = true
-static var blood_enabled: bool = true
+static var particles_enabled: bool = true
 static var screen_shake_enabled: bool = true
 static var hit_lag_enabled: bool = true
 static var retro_filter_enabled: bool = false
@@ -44,7 +44,7 @@ func _ready() -> void:
 	)
 	sfx_toggle.toggled.connect(func(on): sound_enabled = on)
 	hit_flash_toggle.toggled.connect(func(on): hit_flash_enabled = on)
-	blood_toggle.toggled.connect(func(on): blood_enabled = on)
+	blood_toggle.toggled.connect(func(on): particles_enabled = on)
 	SettingsManager.screen_shake_enabled = screen_shake_toggle.button_pressed
 	screen_shake_toggle.toggled.connect(func(on): SettingsManager.screen_shake_enabled = on)
 	hit_lag_toggle.toggled.connect(func(on): hit_lag_enabled = on)
@@ -92,8 +92,8 @@ func toggle_hit_flash() -> void:
 
 
 func toggle_blood() -> void:
-	blood_enabled = not blood_enabled
-	blood_toggle.button_pressed = blood_enabled
+	particles_enabled = not particles_enabled
+	blood_toggle.button_pressed = particles_enabled
 
 func toggle_screen_shake() -> void:
 	SettingsManager.screen_shake_enabled = not SettingsManager.screen_shake_enabled

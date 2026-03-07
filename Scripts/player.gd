@@ -297,7 +297,7 @@ func take_damage(amount: int, from: Vector2 = Vector2.ZERO) -> void:
 	if SettingsManager.sound_enabled:
 		hurt_sfx.play()
 	trigger_hit_flash()
-	if SettingsManager.blood_enabled:
+	if SettingsManager.particles_enabled:
 		var dir := (global_position - from).normalized() if from != Vector2.ZERO else Vector2.RIGHT.rotated(randf_range(0.0, TAU))
 		_spawn_blood(dir)
 	if SettingsManager.screen_shake_enabled:

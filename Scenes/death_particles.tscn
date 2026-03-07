@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://bup452twab7vt"]
+
+[ext_resource type="Texture2D" uid="uid://b7bgo3sj1urk3" path="res://Assets/smoke.png" id="1_55cjx"]
+[ext_resource type="Script" uid="uid://cdnbs5kablkqe" path="res://Scripts/death_particles.gd" id="1_nkpam"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h8pr1"]
+atlas = ExtResource("1_55cjx")
+region = Rect2(34, 2, 4, 4)
+
+[sub_resource type="Gradient" id="Gradient_prbmf"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_8emes"]
+gradient = SubResource("Gradient_prbmf")
+
+[sub_resource type="Curve" id="Curve_xodry"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.6914177, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_xcyic"]
+curve = SubResource("Curve_xodry")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rcqbn"]
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 25.0
+initial_velocity_max = 75.0
+gravity = Vector3(0, 0, 0)
+damping_min = 5.0
+damping_max = 20.0
+scale_curve = SubResource("CurveTexture_xcyic")
+color_ramp = SubResource("GradientTexture1D_8emes")
+turbulence_enabled = true
+
+[node name="DeathParticles" type="GPUParticles2D" unique_id=1914750757]
+emitting = false
+amount = 30
+texture = SubResource("AtlasTexture_h8pr1")
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_rcqbn")
+script = ExtResource("1_nkpam")
