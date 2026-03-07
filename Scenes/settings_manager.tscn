@@ -19,13 +19,14 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -44.0
+offset_left = -112.0
 offset_top = 8.0
 offset_right = -8.0
-offset_bottom = 44.0
+offset_bottom = 58.0
 grow_horizontal = 0
 tooltip_text = "Settings"
-text = "⚙"
+theme_override_font_sizes/font_size = 20
+text = "Settings"
 
 [node name="Panel" type="PanelContainer" parent="." unique_id=218190545]
 process_mode = 3
@@ -161,14 +162,13 @@ text = "Delay Health Bar"
 layout_mode = 2
 button_pressed = true
 
-[node name="RetroFilterRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="RetroFilterRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=1327591155]
 layout_mode = 2
 
-[node name="RetroFilterLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/RetroFilterRow"]
+[node name="RetroFilterLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/RetroFilterRow" unique_id=314113350]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Retro Filter"
 
-[node name="RetroFilterToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/RetroFilterRow"]
+[node name="RetroFilterToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/RetroFilterRow" unique_id=264464576]
 layout_mode = 2
-button_pressed = false
