@@ -11,7 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://dnx6bvstt3tfo" path="res://Assets/oak_woods_v1.0/background/background_layer_2.png" id="4_21xkr"]
 [ext_resource type="Texture2D" uid="uid://ctdry6ak13lvp" path="res://Assets/oak_woods_v1.0/background/background_layer_3.png" id="5_6bp64"]
 [ext_resource type="AudioStream" uid="uid://dgu0sof3syju4" path="res://Audio/BGM/13 - Mystical.ogg" id="11_d1ilt"]
-[ext_resource type="Shader" path="res://Shaders/RetroFilter.gdshader" id="12_retro"]
+[ext_resource type="Shader" uid="uid://b7mmodc3qp2n3" path="res://Shaders/RetroFilter.gdshader" id="12_retro"]
+[ext_resource type="Script" uid="uid://3vpxhejfr7yu" path="res://Scripts/main.gd" id="13_main"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6bp64"]
 texture = ExtResource("2_21xkr")
@@ -468,9 +469,9 @@ bg_color = Color(0.81060827, 0.03607294, 1.92523e-07, 1)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_retro"]
 shader = ExtResource("12_retro")
 shader_parameter/scanline_intensity = 0.25
-shader_parameter/vignette_intensity = 0.5
 
 [node name="Main" type="Node2D" unique_id=1015059756]
+script = ExtResource("13_main")
 
 [node name="Player" parent="." unique_id=975744696 instance=ExtResource("1_jjgbg")]
 position = Vector2(4, 96)
@@ -495,6 +496,20 @@ tile_set = SubResource("TileSet_344ge")
 
 [node name="SettingsManager" parent="UI_Layer" unique_id=1670002564 instance=ExtResource("2_smgr")]
 process_mode = 0
+
+[node name="RestartButton" type="Button" parent="UI_Layer" unique_id=339201847]
+process_mode = 3
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = 20.0
+offset_right = 50.0
+offset_bottom = 44.0
+text = "Restart"
 
 [node name="MarginContainer" type="MarginContainer" parent="UI_Layer" unique_id=667491648]
 offset_right = 300.0
@@ -555,12 +570,11 @@ volume_db = -20.0
 autoplay = true
 parameters/looping = true
 
-[node name="RetroFilter" type="CanvasLayer" parent="."]
+[node name="RetroFilter" type="CanvasLayer" parent="." unique_id=1454379367]
 layer = 100
 
-[node name="ColorRect" type="ColorRect" parent="RetroFilter"]
+[node name="ColorRect" type="ColorRect" parent="RetroFilter" unique_id=1355680003]
 material = SubResource("ShaderMaterial_retro")
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

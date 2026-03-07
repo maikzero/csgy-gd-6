@@ -2,6 +2,7 @@ extends CharacterBody2D
 class_name Enemy
 
 signal health_changed(new_health: int, max_health: int)
+signal died
 
 enum State {
 	IDLE, RUN, JUMP, UP_TO_FALL, FALL,
@@ -265,7 +266,8 @@ func _on_animation_finished(anim_name: StringName) -> void:
 			else:
 				_return_to_ground_state()
 		"death":
-			pass
+			died.emit()
+			get_tree().paused = true
 		"up_to_fall":
 			_transition_play(State.FALL, "fall")
 
