@@ -13,7 +13,7 @@ script = ExtResource("1_4bdhp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=692104439 groups=["enemy"]]
 sprite_frames = ExtResource("2_xruc2")
-animation = &"idle"
+animation = &"run"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=197480148]
 position = Vector2(-1, 10.5)

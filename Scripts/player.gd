@@ -23,7 +23,7 @@ var attack_buffered: bool = false  # attack pressed during attack anim → trigg
 var facing_right: bool = true
 var _dash_timer: float = 0.0
 var _body_col_offset_x: float  # original x offset of body CollisionShape2D
-@export var attack_damage: int = 10
+@export var attack_damage: int = 2
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -70,7 +70,7 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 
 
 func _on_hurtbox_body_entered(body: Node2D) -> void:
-	if body.is_in_group("enemy") and "attack_damage" in body:
+	if body.is_in_group("enemy") and "attack_damage" in body and body.is_attacking:
 		take_damage(body.attack_damage)
 
 func _physics_process(delta: float) -> void:
