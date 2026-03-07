@@ -34,7 +34,7 @@ turbulence_enabled = true
 
 [node name="DeathParticles" type="GPUParticles2D" unique_id=1914750757]
 emitting = false
-amount = 30
+amount = 15
 texture = SubResource("AtlasTexture_h8pr1")
 one_shot = true
 explosiveness = 1.0

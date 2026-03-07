@@ -61,7 +61,7 @@ text = "Settings"
 
 [node name="CloseButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/TitleRow" unique_id=1637665330]
 layout_mode = 2
-text = "✕"
+text = "Close"
 
 [node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer" unique_id=1168589988]
 layout_mode = 2
