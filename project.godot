@@ -19,6 +19,12 @@ config/icon="res://icon.svg"
 
 SettingsManager="*uid://cmsd3jl1u58h4"
 
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+
 [input]
 
 left={

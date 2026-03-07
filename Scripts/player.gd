@@ -34,8 +34,7 @@ var _body_col_offset_x: float  # original x offset of body CollisionShape2D
 @onready var body_col: CollisionShape2D = $CollisionShape2D
 @onready var camera: Camera2D = $Camera2D
 @onready var attack_area: Area2D = $WeaponPivot/Hitbox
-var can_deal_damage: bool = false
-var attacked_enemies: Array = []  # Track enemies hit in this attack
+@onready var hitbox_col: CollisionShape2D = $WeaponPivot/Hitbox/CollisionShape2D
 @onready var dash_sfx: AudioStreamPlayer = $DashSFX
 @onready var sword_sfx: AudioStreamPlayer = $SwordSFX
 @onready var jump_sfx: AudioStreamPlayer = $JumpSFX
@@ -49,6 +48,8 @@ func _ready() -> void:
 	sm.transition_to(State.IDLE)
 	anim_player.play("idle")
 	
+	attack_area.body_entered.connect(_on_hitbox_body_entered)
+	
 	if sprite.material is ShaderMaterial:
 		hit_flash_material = sprite.material
 		print("Shader material found!")  # Helpful for debugging
@@ -60,24 +61,11 @@ func _ready() -> void:
 		sprite.material = new_material
 		hit_flash_material = new_material
 	
-	attack_area.body_entered.connect(_on_hitbox_body_entered)
-	attack_area.monitoring = true
-	
 	hurtbox.body_entered.connect(_on_hurtbox_body_entered)
-	
-	print("=== PLAYER ATTACK SETUP ===")
-	print("Attack area: ", attack_area)
-	print("Attack area monitoring: ", attack_area.monitoring)
-	print("Attack area collision layer: ", attack_area.collision_layer)
-	print("Attack area collision mask: ", attack_area.collision_mask)
+
 
 func _on_hitbox_body_entered(body: Node2D) -> void:
-	if not can_deal_damage:
-		return
-	if body in attacked_enemies:
-		return
 	if body.is_in_group("enemy") and body.has_method("take_damage"):
-		attacked_enemies.append(body)
 		body.take_damage(attack_damage)
 
 
@@ -91,6 +79,7 @@ func _physics_process(delta: float) -> void:
 	_process_state()
 	_update_facing_visuals()
 	move_and_slide()
+
 
 
 func _process_state() -> void:
@@ -202,11 +191,9 @@ func _enter_dash() -> void:
 
 
 func _enter_attack() -> void:
+	attack_buffered = false
 	if SettingsManager.sound_enabled:
 		sword_sfx.play()
-	attack_buffered = false
-	can_deal_damage = true
-	attacked_enemies.clear()
 	_transition_play(State.ATTACK, "attack")
 
 
@@ -239,16 +226,12 @@ func _update_facing_visuals() -> void:
 func _on_animation_finished(anim_name: StringName) -> void:
 	match anim_name:
 		"attack":
-			can_deal_damage = false
 			if attack_buffered:
 				attack_buffered = false
-				attacked_enemies.clear()
-				can_deal_damage = true
 				_transition_play(State.ATTACK2, "attack2")
 			else:
 				_return_to_ground_state()
 		"attack2":
-			can_deal_damage = false
 			_return_to_ground_state()
 		"dash":
 			is_invincible = false
@@ -302,8 +285,6 @@ func take_damage(amount: int) -> void:
 		camera.shake(0.2, 3.0)
 	_transition_play(State.HURT, "hurt")
 	
-
-
 func trigger_hit_flash():
 	# Check your SettingsManager toggle
 	
@@ -318,23 +299,5 @@ func trigger_hit_flash():
 		print("Hit flash disabled")  # Optional debug
 		
 		
-func _process(delta):
-	if can_deal_damage:
-		queue_redraw()
-
-func _draw():
-	if can_deal_damage:
-		var polygon_node = $WeaponPivot/Hitbox/CollisionPolygon2D
-		var points = polygon_node.polygon
-		
-		if points and points.size() > 2:
-			# Convert to global coordinates for drawing
-			var global_points = []
-			var transform = polygon_node.global_transform
-			for point in points:
-				global_points.append(transform * point)
-			
-			# Draw filled polygon with transparency
-			draw_colored_polygon(global_points, Color.RED)  # Just red
-			# Draw outline
-			draw_polyline(global_points + [global_points[0]], Color.RED, 2)
+func _process(_delta: float) -> void:
+	pass

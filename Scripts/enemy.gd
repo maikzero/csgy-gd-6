@@ -197,9 +197,9 @@ func _physics_process(delta):
 	# Update sprite facing direction
 	update_facing_direction(direction)
 	
-	if Engine.get_physics_frames() % 60 == 0:
-		print("Enemy at: ", global_position, " (distance to player: ", 
-			  global_position.distance_to(player.global_position) if player else 0, ")")
+	#if Engine.get_physics_frames() % 60 == 0:
+		#print("Enemy at: ", global_position, " (distance to player: ", 
+			  #global_position.distance_to(player.global_position) if player else 0, ")")
 
 func update_facing_direction(direction: Vector2):
 	if direction.x != 0:
@@ -264,12 +264,6 @@ func take_damage(damage: int):
 	# 3. Blood Particles
 	if SettingsManager.blood_enabled:
 		blood_particles.emitting = true
-	
-	# 4. Screen Shake
-	#if SettingsManager.screen_shake_enabled:
-		#var camera = get_viewport().get_camera_2d()
-		#if camera and camera.has_method("shake"):
-			#camera.shake(0.2, 5, 10)
 	
 	# Check for death
 	if health <= 0:
