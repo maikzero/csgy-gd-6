@@ -77,15 +77,15 @@ text = "Music"
 layout_mode = 2
 button_pressed = true
 
-[node name="SFXRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="SFXRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=118852830]
 layout_mode = 2
 
-[node name="SFXLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/SFXRow"]
+[node name="SFXLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/SFXRow" unique_id=1450498642]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Sound Effects"
 
-[node name="SFXToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/SFXRow"]
+[node name="SFXToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/SFXRow" unique_id=520786661]
 layout_mode = 2
 button_pressed = true
 
@@ -122,6 +122,18 @@ size_flags_horizontal = 3
 text = "Screen Shake"
 
 [node name="ScreenShakeToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/ScreenShakeRow" unique_id=347680437]
+layout_mode = 2
+button_pressed = true
+
+[node name="HitLagRow" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=1440528497]
+layout_mode = 2
+
+[node name="HitLagLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/HitLagRow" unique_id=2111035478]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Hit Lag"
+
+[node name="HitLagToggle" type="CheckButton" parent="Panel/MarginContainer/VBoxContainer/HitLagRow" unique_id=1072841811]
 layout_mode = 2
 button_pressed = true
 

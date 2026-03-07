@@ -45,7 +45,8 @@ var _body_col_offset_x: float  # original x offset of body CollisionShape2D
 
 const BLOOD_PARTICLES = preload("res://Scenes/blood_particles.tscn")
 
-var hit_flash_material: ShaderMaterial
+var _hit_lag_active: bool = false
+var hit_flash_material
 
 func _ready() -> void:
 	health = max_health
@@ -76,6 +77,8 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 		body.take_damage(damage)
 		if sm.current_state == State.DASH_ATTACK and SettingsManager.screen_shake_enabled:
 			camera.shake(0.1, 2.0)
+		if SettingsManager.hit_lag_enabled:
+			_trigger_hit_lag()
 
 
 func _on_hurtbox_body_entered(body: Node2D) -> void:
@@ -319,3 +322,15 @@ func _spawn_blood(direction: Vector2) -> void:
 	blood.global_position = global_position
 	blood.rotation = direction.angle()
 	get_parent().add_child(blood)
+
+func _trigger_hit_lag(duration: float = 0.09) -> void:
+	if _hit_lag_active:
+		return
+	_hit_lag_active = true
+	Engine.time_scale = 0.0
+	var tween := create_tween()
+	tween.set_ignore_time_scale(true)
+	tween.tween_callback(func():
+		Engine.time_scale = 1.0
+		_hit_lag_active = false
+	).set_delay(duration)

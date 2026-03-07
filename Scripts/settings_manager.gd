@@ -5,6 +5,7 @@ static var sound_enabled: bool = true
 static var hit_flash_enabled: bool = true
 static var blood_enabled: bool = true
 static var screen_shake_enabled: bool = true
+static var hit_lag_enabled: bool = true
 static var parallax_enabled: bool = true
 static var delay_bar_enabled: bool = true
 
@@ -18,6 +19,7 @@ signal delay_bar_toggled(enabled: bool)
 @onready var hit_flash_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/HitFlashRow/HitFlashToggle
 @onready var blood_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/BloodRow/BloodToggle
 @onready var screen_shake_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/ScreenShakeRow/ScreenShakeToggle
+@onready var hit_lag_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/HitLagRow/HitLagToggle
 @onready var parallax_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/ParallaxRow/ParallaxToggle
 @onready var delay_bar_toggle: CheckButton = $Panel/MarginContainer/VBoxContainer/DelayBarRow/DelayBarToggle
 @onready var parallax_bg: ParallaxBackground = get_tree().current_scene.get_node("ParallaxBackground")
@@ -42,6 +44,7 @@ func _ready() -> void:
 	blood_toggle.toggled.connect(func(on): blood_enabled = on)
 	SettingsManager.screen_shake_enabled = screen_shake_toggle.button_pressed
 	screen_shake_toggle.toggled.connect(func(on): SettingsManager.screen_shake_enabled = on)
+	hit_lag_toggle.toggled.connect(func(on): hit_lag_enabled = on)
 	parallax_toggle.toggled.connect(_on_parallax_toggled)
 	delay_bar_toggle.toggled.connect(func(on):
 		delay_bar_enabled = on
